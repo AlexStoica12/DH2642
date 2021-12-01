@@ -47,6 +47,7 @@ export default {
     //
   }),
   created: function () {
+    console.log("I created the app. Getting a token!");
     this.$store.dispatch("login").catch((err) => console.log(err));
   },
 };

@@ -1,17 +1,16 @@
+import store from "../store";
+
 const artsySource = {
-  token: "",
   apiCall(params) {
+    console.log("In API?", store.getters.currentToken);
     return fetch("https://api.artsy.net/api/" + params, {
       method: "GET",
       headers: {
-        "X-Xapp-Token": this.token,
+        "X-Xapp-Token": store.getters.currentToken,
       },
     }).then((response) => {
       if (response.status === 400) {
-        artsyApiToken
-          .apiCall()
-          .then((r) => (this.token = r.token))
-          .catch((e) => console.log(e));
+        store.dispatch("login").catch((err) => console.log(err));
       } else if (response.status !== 200) {
         throw new Error(response.statusText);
       }
@@ -54,21 +53,4 @@ const artsySource = {
     });
   },
 };
-
-const artsyApiToken = {
-  apiCall() {
-    return fetch(
-      "https://api.artsy.net/api/tokens/xapp_token?client_id=13d34ce7f1970b2cdb6c&client_secret=86fa3ab3fc163a22b49f3ec8944898b0",
-      {
-        method: "POST",
-      }
-    ).then((r) => {
-      if (r.status !== 201) {
-        throw new Error(r.statusText);
-      }
-      return r.json();
-    });
-  },
-};
-
 export default artsySource;
