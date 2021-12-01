@@ -33,6 +33,26 @@ const artsySource = {
       return data;
     });
   },
+  searchAllArtworks() {
+    return artsySource.apiCall("artworks?size=100").then((data) => {
+      return data;
+    });
+  },
+
+  async test() {
+    artsySource.searchArtistID("4d8b92b34eb68a1b2c0003f4").then((artist) => {
+      console.log("The artist is", artist);
+    });
+    artsySource.searchArtworks("dfb9ab31e2b2270000c45").then((artwork) => {
+      console.log("The artwork is", artwork);
+    });
+    artsySource.searchAllArtworks().then((artworks) => {
+      console.log(
+        "The number of artworks found are: ",
+        artworks._embedded.artworks.length
+      );
+    });
+  },
 };
 
 const artsyApiToken = {
@@ -50,3 +70,5 @@ const artsyApiToken = {
     });
   },
 };
+
+export default artsySource;

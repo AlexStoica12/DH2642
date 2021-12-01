@@ -1,15 +1,18 @@
 <template>
-  <hello-world />
+  <v-btn color="success" @click="test">text</v-btn>
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld";
+import artsySource from "../js/artsySource.js";
 
 export default {
   name: "Home",
-
-  components: {
-    HelloWorld,
+  components: {},
+  methods: {
+    test: function () {
+      console.log("Entering Test");
+      artsySource.test();
+    },
   },
 };
 </script>
