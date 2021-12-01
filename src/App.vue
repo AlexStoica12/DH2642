@@ -46,5 +46,8 @@ export default {
   data: () => ({
     //
   }),
+  created: function () {
+    this.$store.dispatch("login").catch((err) => console.log(err));
+  },
 };
 </script>
