@@ -28,24 +28,11 @@ export default {
       console.log("I BROKE IT", this.$store.getters.currentToken);
     },
     test: function () {
-      console.log("Entering Test");
-      artsySource.test();
+      artsySource.testApi();
     },
-    testModelFunc: async () => {
-      console.log("Entering Model Test");
-      const myModel = new ArtsyModel();
-      let artworks = await artsySource.searchAllArtworks();
-      artworks = artworks._embedded.artworks;
-      const five_artworks = artworks.slice(10, 15);
-      const artwork = artworks[7];
-      myModel.addToFavorited(artwork);
-      console.log("Added an artwork to favorited", myModel);
-      myModel.removeFromFavorited(artwork);
-      console.log("Removed an artwork from favorited", myModel);
-      myModel.setFavoritedArtworks(five_artworks);
-      console.log("Set all the favorited artworks from an array", myModel);
-      myModel.setCurrentArtwork(five_artworks[2].id);
-      console.log("Set the current artwork", myModel);
+    testModelFunc: () => {
+      const test = new ArtsyModel();
+      test.testModel();
     },
   },
 };

@@ -51,7 +51,8 @@ const artsySource = {
     });
   },
 
-  async test() {
+  async testApi() {
+    console.log("Entering API Test");
     artsySource.searchArtistID("4d8b92b34eb68a1b2c0003f4").then((artist) => {
       console.log("The artist is", artist);
     });
