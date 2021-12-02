@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import ArtsyModel from "../js/artsyModel.js";
 
 Vue.use(Vuex);
 
@@ -7,10 +8,14 @@ export default new Vuex.Store({
   state: {
     status: "",
     token: localStorage.getItem("token") | "",
+    model: new ArtsyModel(),
   },
   mutations: {
-    auth_request(state) {
+    request(state) {
       state.status = "loading";
+    },
+    complete(state) {
+      state.status = "success";
     },
     auth_success(state, token) {
       state.status = "success";
@@ -22,6 +27,18 @@ export default new Vuex.Store({
     logout(state) {
       state.status = "";
       state.token = "";
+    },
+    addToFavorited(state, artwork) {
+      state.model.addToFavorited(artwork);
+    },
+    removeFromFavorited(state, artwork) {
+      state.model.removeFromFavorited(artwork);
+    },
+    setFavoritedArtworks(state, artwork) {
+      state.model.setFavoritedArtworks(artwork);
+    },
+    setCurrentArtwork(state, artwork) {
+      state.model.setCurrentArtwork(artwork);
     },
   },
   actions: {
@@ -53,10 +70,25 @@ export default new Vuex.Store({
           });
       });
     },
+    addToFavorited({ commit }, artwork) {
+      commit("addToFavorited", artwork);
+    },
+    removeFromFavorited({ commit }, artwork) {
+      commit("removeFromFavorited", artwork);
+    },
+    setFavoritedArtworks({ commit }, artworks) {
+      commit("setFavoritedArtworks", artworks);
+    },
+    async setCurrentArtwork({ commit }, artwork) {
+      commit("request");
+      commit("setCurrentArtwork", artwork);
+      commit("complete");
+    },
   },
   getters: {
     isLoggedIn: (state) => !!state.token,
     authStatus: (state) => state.status,
     currentToken: (state) => state.token,
+    myModel: (state) => state.model,
   },
 });
