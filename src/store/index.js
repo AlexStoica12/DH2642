@@ -14,6 +14,9 @@ export default new Vuex.Store({
     request(state) {
       state.status = "loading";
     },
+    auth_request(state) {
+      state.status = "loading";
+    },
     complete(state) {
       state.status = "success";
     },

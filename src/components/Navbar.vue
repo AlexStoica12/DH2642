@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-toolbar flat app>
+    <v-app-bar app flat>
       <v-app-bar-nav-icon
         class="grey--text"
         @click="drawer = !drawer"
@@ -9,7 +9,7 @@
         <span class="font-weight-light">Art</span>
         <span>Point</span>
       </v-toolbar-title>
-    </v-toolbar>
+    </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list nav dense>
