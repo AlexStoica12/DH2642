@@ -2,7 +2,6 @@ import store from "../store";
 
 const artsySource = {
   apiCall(params) {
-    console.log("In API?", store.getters.currentToken);
     return fetch("https://api.artsy.net/api/" + params, {
       method: "GET",
       headers: {
@@ -22,6 +21,13 @@ const artsySource = {
       return data;
     });
   },
+  searchArtistParams(params) {
+    return artsySource
+      .apiCall("artists?" + new URLSearchParams(params))
+      .then((data) => {
+        return data;
+      });
+  },
   searchQuery(query) {
     return artsySource.apiCall("search?q=" + query).then((data) => {
       return data;
@@ -31,6 +37,13 @@ const artsySource = {
     return artsySource.apiCall("artworks/" + id).then((data) => {
       return data;
     });
+  },
+  searchArtworksParams(params) {
+    return artsySource
+      .apiCall("artworks?" + new URLSearchParams(params))
+      .then((data) => {
+        return data;
+      });
   },
   searchAllArtworks() {
     return artsySource.apiCall("artworks?size=100").then((data) => {
