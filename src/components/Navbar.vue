@@ -1,11 +1,13 @@
 <template>
   <nav>
     <v-app-bar app class="rounded-xl px-5 mx-5 white">
+      <!-- Logo -->
       <v-toolbar-title class="text-uppercase">
         <span class="font-weight-light">Art</span>
         <span>Point</span>
       </v-toolbar-title>
       <v-divider class="mx-4" vertical></v-divider>
+      <!-- For bigger screens, Explore and My Gallery Tab -->
       <v-toolbar-items>
         <v-btn
           plain
@@ -18,9 +20,10 @@
           {{ item.text }}
         </v-btn>
       </v-toolbar-items>
+
+      <!-- On Right Side, Profile Tab -->
       <v-spacer></v-spacer>
       <v-divider class="mx-4" vertical></v-divider>
-
       <v-toolbar-items>
         <v-btn
           plain
@@ -32,16 +35,19 @@
         </v-btn>
       </v-toolbar-items>
 
+      <!-- Logic for the drawer (only visible on xs screens) -->
       <v-app-bar-nav-icon
         class="grey--text hidden-sm-and-up"
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
     </v-app-bar>
 
+    <!-- Navigation Drawer for Small Small Screens -->
     <v-navigation-drawer v-model="drawer" absolute temporary right>
       <v-list nav dense>
         <v-list-item> </v-list-item>
         <v-list-item-group>
+          <!-- Explore and My Gallery Tab-->
           <v-list-item
             v-for="link in links"
             :key="link.text"
@@ -51,6 +57,14 @@
               <v-icon></v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{ link.text }}</v-list-item-title>
+          </v-list-item>
+
+          <!-- Profile Tab -->
+          <v-list-item @click="navigateTo('/')">
+            <v-list-item-icon>
+              <v-icon></v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Profile</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -72,6 +86,7 @@ export default {
     };
   },
   methods: {
+    // Helper function for navigation
     navigateTo: function (route) {
       this.$router.push(route);
     },
