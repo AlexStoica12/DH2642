@@ -1,17 +1,18 @@
 <template>
   <nav>
     <v-app-bar app flat>
-      <v-app-bar-nav-icon
-        class="grey--text"
-        @click="drawer = !drawer"
-      ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase grey--text">
         <span class="font-weight-light">Art</span>
         <span>Point</span>
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-app-bar-nav-icon
+        class="grey--text"
+        @click="drawer = !drawer"
+      ></v-app-bar-nav-icon>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-model="drawer" absolute temporary right>
       <v-list nav dense>
         <v-list-item> </v-list-item>
         <v-list-item-group>
