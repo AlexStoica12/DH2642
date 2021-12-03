@@ -1,13 +1,25 @@
 <template>
   <nav>
-    <v-app-bar app flat>
+    <v-app-bar app class="rounded-xl px-5">
       <v-toolbar-title class="text-uppercase grey--text">
         <span class="font-weight-light">Art</span>
         <span>Point</span>
       </v-toolbar-title>
+      <v-divider class="mx-4" vertical></v-divider>
       <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn
+          v-for="item in links"
+          :key="item.title"
+          :to="item.route"
+          class="white hidden-xs-only"
+          style="width: 100px"
+        >
+          {{ item.text }}
+        </v-btn>
+      </v-toolbar-items>
       <v-app-bar-nav-icon
-        class="grey--text"
+        class="grey--text hidden-sm-and-up"
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
     </v-app-bar>
@@ -39,9 +51,7 @@ export default {
     return {
       drawer: false,
       links: [
-        { icon: "mdi-login-variant", text: "Sign In", route: "/" },
         { icon: "mdi-home", text: "Home", route: "/home" },
-        { icon: "mdi-account-details", text: "Details", route: "/details" },
         { icon: "mdi-account", text: "Profile", route: "/profile" },
       ],
     };
