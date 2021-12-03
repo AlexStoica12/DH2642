@@ -1,47 +1,68 @@
 <template>
   <nav>
-    <v-app-bar app flat>
-      <v-app-bar-nav-icon
-        class="grey--text"
-        @click="drawer = !drawer"
-      ></v-app-bar-nav-icon>
-      <v-toolbar-title class="text-uppercase grey--text">
+    <v-app-bar app class="rounded-xl px-5 mx-5 white">
+      <!-- Logo -->
+      <v-toolbar-title class="text-uppercase">
         <span class="font-weight-light">Art</span>
         <span>Point</span>
       </v-toolbar-title>
+      <v-divider class="mx-4" vertical></v-divider>
+      <!-- For bigger screens, Explore and My Gallery Tab -->
+      <v-toolbar-items>
+        <v-btn
+          plain
+          v-for="item in links"
+          :key="item.title"
+          :to="item.route"
+          class="white hidden-xs-only"
+          style="width: 125px"
+        >
+          {{ item.text }}
+        </v-btn>
+      </v-toolbar-items>
+
+      <!-- On Right Side, Profile Tab -->
+      <v-spacer></v-spacer>
+      <v-divider class="mx-4" vertical></v-divider>
+      <v-toolbar-items>
+        <v-btn
+          plain
+          @click="navigateTo('/')"
+          class="white hidden-xs-only"
+          style="width: 100px"
+        >
+          <v-icon>mdi-account</v-icon>
+        </v-btn>
+      </v-toolbar-items>
+
+      <!-- Logic for the drawer (only visible on xs screens) -->
+      <v-app-bar-nav-icon
+        class="grey--text hidden-sm-and-up"
+        @click="drawer = !drawer"
+      ></v-app-bar-nav-icon>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <!-- Navigation Drawer for Small Small Screens -->
+    <v-navigation-drawer v-model="drawer" absolute temporary right>
       <v-list nav dense>
-        <v-list-item-group active-class="deep-purple--text text--accent-4">
-          <v-list-item active-class="no-active">
-            <h1 class="mb-5">Drawer</h1>
+        <v-list-item> </v-list-item>
+        <v-list-item-group>
+          <!-- Explore and My Gallery Tab-->
+          <v-list-item
+            v-for="link in links"
+            :key="link.text"
+            @click="navigateTo(link.route)"
+          >
+            <v-list-item-icon>
+              <v-icon></v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ link.text }}</v-list-item-title>
           </v-list-item>
 
+          <!-- Profile Tab -->
           <v-list-item @click="navigateTo('/')">
             <v-list-item-icon>
-              <v-icon>mdi-login-variant</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Sign In</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item @click="navigateTo('/home')">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item @click="navigateTo('/details')">
-            <v-list-item-icon>
-              <v-icon>mdi-account-details</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Details</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item @click="navigateTo('/profile')">
-            <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
+              <v-icon></v-icon>
             </v-list-item-icon>
             <v-list-item-title>Profile</v-list-item-title>
           </v-list-item>
@@ -57,14 +78,19 @@ export default {
   data() {
     return {
       drawer: false,
+      links: [
+        { icon: "mdi-home", text: "Explore", route: "/home" },
+        { icon: "mdi-home", text: "My Gallery", route: "/profile" },
+        // { icon: "mdi-account", text: "Sign In", route: "/signin" },
+      ],
     };
   },
   methods: {
+    // Helper function for navigation
     navigateTo: function (route) {
       this.$router.push(route);
     },
   },
 };
 </script>
-
 <style></style>
