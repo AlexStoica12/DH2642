@@ -13,37 +13,17 @@
 
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list nav dense>
-        <v-list-item-group active-class="deep-purple--text text--accent-4">
-          <v-list-item active-class="no-active">
-            <h1 class="mb-5">Drawer</h1>
-          </v-list-item>
-
-          <v-list-item @click="navigateTo('/')">
+        <v-list-item> </v-list-item>
+        <v-list-item-group>
+          <v-list-item
+            v-for="link in links"
+            :key="link.text"
+            @click="navigateTo(link.route)"
+          >
             <v-list-item-icon>
-              <v-icon>mdi-login-variant</v-icon>
+              <v-icon>{{ link.icon }}</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Sign In</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item @click="navigateTo('/home')">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item @click="navigateTo('/details')">
-            <v-list-item-icon>
-              <v-icon>mdi-account-details</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Details</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item @click="navigateTo('/profile')">
-            <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Profile</v-list-item-title>
+            <v-list-item-title>{{ link.text }}</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -57,6 +37,12 @@ export default {
   data() {
     return {
       drawer: false,
+      links: [
+        { icon: "mdi-login-variant", text: "Sign In", route: "/" },
+        { icon: "mdi-home", text: "Home", route: "/home" },
+        { icon: "mdi-account-details", text: "Details", route: "/details" },
+        { icon: "mdi-account", text: "Profile", route: "/profile" },
+      ],
     };
   },
   methods: {
