@@ -13,15 +13,16 @@
       <!-- Right Side -->
       <v-col id="right" cols="12" md="7" align="center">
         <v-row align="center" justify="center" class="mx-8 mx-md-16">
-          <v-col class="px-16">
+          <v-col class="px-16" cols="12">
             <!-- Title -->
-            <h1 class="my-5">Sign In</h1>
+            <h1 class="my-5 mb-16">Sign In</h1>
             <!-- Username Text Field -->
             <v-text-field
               v-model="username"
               solo
               label="Username..."
               clearable
+              class="my-3"
             ></v-text-field>
             <!-- Password Text Field -->
             <v-text-field
@@ -29,10 +30,12 @@
               solo
               label="Password..."
               clearable
+              class="my-3"
             ></v-text-field>
-            <!-- Buttons -->
-            <v-btn block> Sign In </v-btn>
-            <p>Already have an account?</p>
+            <!-- Sign In -->
+            <v-btn id="btn" class="my-3"> Sign In </v-btn>
+            <!-- Already have an account -->
+            <p class="grey--text text--darken-3">Already have an account?</p>
           </v-col>
         </v-row>
       </v-col>
@@ -57,5 +60,17 @@ export default {
   background: url("../assets/green-leaf.jpg");
   background-position: left;
   background-size: cover;
+}
+
+.v-btn {
+  width: 100%;
+}
+
+/* If x>960px */
+@media (min-width: 960px) {
+  .v-text-field,
+  .v-btn {
+    width: 75%;
+  }
 }
 </style>
