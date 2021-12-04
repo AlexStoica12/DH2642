@@ -2,68 +2,103 @@
   <div>
     <v-container>
       <v-row>
-        <v-col align-self="start" class="pl-0">
+        <v-col align-self="start">
           <v-btn class="ma-1">back to search results.</v-btn>
         </v-col>
       </v-row>
       <v-row class="mt-0">
-        <v-col cols="8" class="pl-0">
-          <v-sheet color="grey lighten-3" min-height="70vh" rounded="lg">
+        <v-col cols="8">
+          <v-sheet color="white" min-height="70vh" rounded="lg">
             <h1 class="pa-3">{{ currentArtwork.artworkName }}</h1>
             <h2 class="pa-3 pt-0">{{ currentArtwork.artist }}</h2>
-                        <v-img
-                          class="pl-3 prtb-5"
-                          :src="currentArtwork.image"
-                          max-height="300"
-                          max-width="1000"
-                        ></v-img>
+            <v-img
+              contain
+              class="pa-10"
+              max-height="55vh"
+              :src="currentArtwork.image"
+              position="center center"
+            ></v-img>
           </v-sheet>
         </v-col>
         <v-col cols="4" class="pl-0">
-          <v-sheet
-            color="grey lighten-3"
-            min-height="70vh"
-            rounded="lg"
-          ></v-sheet>
+          <v-sheet color="white" min-height="70vh" rounded="lg">
+            <div class="pt-16">
+              <h1 class="pl-4 pt-10">Dimensions</h1>
+              <h2 class="pl-4">{{ currentArtwork.dimensions }}</h2>
+            </div>
+            <div>
+              <h1 class="pl-4 pt-5">Price</h1>
+              <h2 class="pl-4">{{ currentArtwork.price }}</h2>
+            </div>
+            <div>
+              <h1 class="pl-4 pt-5">Gallery</h1>
+              <h2 class="pl-4">{{ currentArtwork.gallery }}</h2>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn
+              block
+              color="black"
+              class="pa-4 mt-16 white--text"
+              rounded
+              elevation="2"
+              x-large
+              @click="snackbarAddToGallery = true"
+            >
+              Add to My Gallery
+            </v-btn>
+            <v-snackbar
+              v-model="snackbarAddToGallery"
+              :timeout="timeoutSnackbarAddToGallery"
+            >
+              Artwork added to My Gallery
+              <template v-slot:action="{ attrs }">
+                <v-btn
+                  color="blue"
+                  text
+                  v-bind="attrs"
+                  @click="snackbarAddToGallery = false"
+                >
+                  Close
+                </v-btn>
+              </template>
+            </v-snackbar>
+          </v-sheet>
         </v-col>
       </v-row>
       <v-row class="pa-0">
         <v-col>
-          <v-sheet
-            color="grey lighten-3"
-            min-height="20vh"
-            rounded="lg"
-            class="pt-0"
-          >
+          <v-sheet color="white" min-height="20vh" rounded="lg" class="pt-0">
             <h3 class="pa-4">Similar works</h3>
-            <v-slide-group
-              v-model="model"
-              class="pa-4"
-              active-class="success"
-              show-arrows
-            >
-              <v-slide-item v-for="n in 15" :key="n">
-                <v-card class="ma-2" height="300" width="300">
+            <v-slide-group show-arrows>
+              <v-slide-item v-for="n in similarWorks" :key="n.title">
+                <v-card
+                  class="ma-2 mb-5 d-flex flex-column"
+                  height="325"
+                  width="300"
+                  hover
+                >
                   <v-img
                     class="white--text align-end"
                     height="200px"
-                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                    :src="n.thumbnail"
                   >
-                    <v-card-title>Top 10 Australian beaches</v-card-title>
                   </v-img>
-
-                  <v-card-subtitle class="pb-0"> Number 10 </v-card-subtitle>
-
-                  <v-card-text class="text--primary">
-                    <div>Whitehaven Beach</div>
-
-                    <div>Whitsunday Island, Whitsunday Islands</div>
+                  <v-card-text class="pb-0">
+                    <div style="width: 200px">
+                      <p class="overflow-x-auto font-weight-medium">
+                        {{ n.title }}
+                      </p>
+                    </div>
                   </v-card-text>
-
+                  <v-spacer></v-spacer>
                   <v-card-actions>
-                    <v-btn color="orange" text> Share </v-btn>
-
-                    <v-btn color="orange" text> Explore </v-btn>
+                    <v-btn
+                      color="orange"
+                      text
+                      @click="snackbarAddToGallery = true"
+                    >
+                      Add to My Gallery
+                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-slide-item>
@@ -71,84 +106,41 @@
           </v-sheet>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="pa-0">
         <v-col>
-          <v-sheet
-            color="grey lighten-3"
-            min-height="20vh"
-            rounded="lg"
-            class="pt-0"
-          >
-            <v-slide-group
-              v-model="model"
-              class="pa-4"
-              active-class="success"
-              show-arrows
-            >
-              <v-slide-item
-                v-for="n in 15"
-                :key="n"
-                v-slot="{ active, toggle }"
-              >
+          <v-sheet color="white" min-height="20vh" rounded="lg" class="pt-0">
+            <h3 class="pa-4">Similar works</h3>
+            <v-slide-group show-arrows>
+              <v-slide-item v-for="n in similarWorks" :key="n.title">
                 <v-card
-                  :color="active ? undefined : 'grey lighten-1'"
-                  class="m-4"
-                  height="200"
-                  width="100"
-                  @click="toggle"
+                  class="ma-2 mb-5 d-flex flex-column"
+                  height="325"
+                  width="300"
+                  hover
                 >
-                  <v-row class="fill-height" align="center" justify="center">
-                    <v-scale-transition>
-                      <v-icon
-                        v-if="active"
-                        color="white"
-                        size="48"
-                        v-text="'mdi-close-circle-outline'"
-                      ></v-icon>
-                    </v-scale-transition>
-                  </v-row>
-                </v-card>
-              </v-slide-item>
-            </v-slide-group>
-          </v-sheet>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-sheet
-            color="grey lighten-3"
-            min-height="20vh"
-            rounded="lg"
-            class="mt-0"
-          >
-            <v-slide-group
-              v-model="model"
-              class="pa-4"
-              active-class="success"
-              show-arrows
-            >
-              <v-slide-item
-                v-for="n in 15"
-                :key="n"
-                v-slot="{ active, toggle }"
-              >
-                <v-card
-                  :color="active ? undefined : 'grey lighten-1'"
-                  class="ma-4"
-                  height="200"
-                  width="100"
-                  @click="toggle"
-                >
-                  <v-row class="fill-height" align="center" justify="center">
-                    <v-scale-transition>
-                      <v-icon
-                        v-if="active"
-                        color="white"
-                        size="48"
-                        v-text="'mdi-close-circle-outline'"
-                      ></v-icon>
-                    </v-scale-transition>
-                  </v-row>
+                  <v-img
+                    class="white--text align-end"
+                    height="200px"
+                    :src="n.thumbnail"
+                  >
+                  </v-img>
+                  <v-card-text class="pb-0">
+                    <div style="width: 200px">
+                      <p class="overflow-x-auto font-weight-medium">
+                        {{ n.title }}
+                      </p>
+                    </div>
+                  </v-card-text>
+                  <v-spacer></v-spacer>
+                  <v-card-actions>
+                    <v-btn
+                      color="orange"
+                      text
+                      @click="snackbarAddToGallery = true"
+                    >
+                      Add to My Gallery
+                    </v-btn>
+                  </v-card-actions>
                 </v-card>
               </v-slide-item>
             </v-slide-group>
@@ -162,21 +154,50 @@
 <script>
 export default {
   name: "Details",
+  methods: {
+    addArtworkToGallery: function () {},
+  },
   data() {
     return {
-      model: 0,
-      colors: ["primary", "secondary", "yellow darken-2", "red", "orange"],
+      snackbarAddToGallery: false,
+      timeoutSnackbarAddToGallery: 2000,
       currentArtwork: {
         image:
           "https://d32dm0rphc51dk.cloudfront.net/dTGcd0Xx0aEp_MDFdHIUIw/larger.jpg",
-        artworkName: "Name of the artwork",
-        artist: "Name of the artist",
+        artworkName: "The Old Violin",
+        artist: "William Michael Harnett",
         price: "Price",
         gallery: "Name of the gallery",
-        galleryAddress: "Gallery address",
-        dimensions: "",
+        galleryAddress: "National Gallery of Art, Washington D.C.",
+        dimensions: "96.5 × 60 cm",
       },
-      similarWorks: [{}, {}],
+      similarWorks: [
+        {
+          title: "Green River Cliffs, Wyoming",
+          thumbnail:
+            "https://d32dm0rphc51dk.cloudfront.net/ajqWTqyPas0pM7BosKMgUA/medium.jpg",
+        },
+        {
+          title: "U.S. Thread Company Mills, Willimantic, Connecticut",
+          thumbnail:
+            "https://d32dm0rphc51dk.cloudfront.net/67ssKdY1utPgRnTky40Q9Q/medium.jpg",
+        },
+        {
+          title: "View of the Tiber near Perugia",
+          thumbnail:
+            "https://d32dm0rphc51dk.cloudfront.net/_E0H6k-BlFE81xPuMiNjyg/medium.jpg",
+        },
+        {
+          title: "Breakfast",
+          thumbnail:
+            "https://d32dm0rphc51dk.cloudfront.net/MoR7cUheG5Iv4cM1HeR3CQ/medium.jpg",
+        },
+        {
+          title: "Cattleya Orchid and Three Hummingbirds",
+          thumbnail:
+            "https://d32dm0rphc51dk.cloudfront.net/sRcWwNuubf6I6XKZeAVLuA/medium.jpg",
+        },
+      ],
       otherWorkFromArtist: [{}, {}],
       similarArtists: [{}, {}],
     };
