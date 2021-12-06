@@ -1,60 +1,72 @@
+/* eslint-disable */
 <template>
-  <div class="gosh">
-     
-    <link rel="stylesheet" type="text/css" href="style.css">
-    
-    <v-container :key="image.url" v-for="(image, i) in images">
+  <v-card flat tile>
+    <v-toolbar color="white" light>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-    <v-container v-if="i % 2 == 0" align = "right" class="images">
-      <v-col>
-      
-        <v-row class="sub-image">      {{image.name}}  {{image.artist}}       
+      <v-toolbar-title>Search</v-toolbar-title>
 
-        
-    
-      <img :src="image.url" alt="artwork" align = "right" />
-      
-        </v-row>
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-row>
+      <v-spacer></v-spacer>
+      <v-col
+        v-for="artwork in artworks"
+        :key="artwork.url"
+        cols="12"
+        sm="6"
+        md="4"
+      >
+        <v-card @click="navigateTo('/details')">
+          <v-img :src="artwork.url" height="300px">
+            <span
+              class="text-md-subtitle-2 white--text pl-4 pt-4 d-inline-block"
+              v-text="artwork.name"
+            ></span>
+          </v-img>
+
+          <v-card-actions class="white justify-center">
+            <v-col class="text-center">
+              <span
+                class="text-md-subtitle-2 black--text pl-4 pt-4 d-inline-block"
+                v-text="artwork.artist"
+              ></span>
+              <br />
+              <v-btn
+                v-for="(social, i) in socials"
+                :key="i"
+                :color="social.color"
+                class="white--text"
+                fab
+                icon
+                small
+              >
+                
+              </v-btn>
+            </v-col>
+          </v-card-actions>
+        </v-card>
       </v-col>
-      
-      
-    </v-container>
-    <v-container v-else class="images">
-      <v-col>
-          
-
-
-        
-        
-        <img :src="image.url" alt="artwork" align = "left" class="images" @click="directImage"/>
-        <v-row class="sub-image">  {{image.name}} {{image.artist}} 
-        </v-row>
-        
-      </v-col>
-    </v-container>
-    </v-container>
-  <div class = "profileBox">
-    <h1>Lilla my</h1>
-    
-
-  </div>
-    
-  
-
-    
-  </div>
+    </v-row>
+  </v-card>
 </template>
-
 <script>
-export default {
-  methods: {
-    directImage() {
-        //redirect to detailspage
-  }
-},
+// @ is an alias to /src
+//import Results from "../components/Results.vue";
+//import artsySource from "@/js/artsySource";
 
+export default {
+  name: "Home",
+  mounted() {
+    this.searchArtworks();
+  },
   data() {
     return {
+      artworks: [],
       images: [
         {
           url: "https://64.media.tumblr.com/14709159e19643734eaa79f7ff8ac06d/f317c58810f9ebc3-f8/s500x750/f4ce4c174c19f8dfaf5dbaefab512e1d9fe77c7b.jpg",
@@ -72,36 +84,47 @@ export default {
           artist: "Lady Skollie"
         },
       ],
+      socials: [
+        {
+          icon: "mdi-facebook",
+          color: "indigo",
+        },
+        {
+          icon: "mdi-instagram",
+          color: "red lighten-3",
+        },
+      ],
     };
+  },
+  methods: {
+    async searchArtworks() {
+      //let artworks = await artsySource.searchAllArtworks();
+      this.artworks = this.images//artworks._embedded.artworks;
+    },
+    // Helper function for navigation
+    navigateTo: function (route) {
+      this.$router.push(route);
+    },
   },
 };
 </script>
-
-
-<style scoped>
-.gosh {
-  background: #F5F2F2;
+<style lang="scss" scoped>
+.md-card {
+  width: 30vw;
+  margin: 4px;
+  display: inline-block;
+  vertical-align: top;
 }
-.profileBox {
-  align-items: right;
-  display: flex;
+.home {
+  margin: 0 auto;
 }
-.images {
-    line-height: 300px;
-}
-.br {
-            display: inline-block;
-           
-        }
-
-.sub-images {
-  line-height: auto;
-  
-}
-img {
-    display: block;
-    width: auto;
-    height: 250px;
-    margin: 20px;
+.subheading {
+  /*Google fonts: Archivo*/
+  font-family: "Archivo", sans-serif, Helvetica;
+  font-size: 16px !important;
+  font-weight: 400;
+  cursor: pointer;
+  color: #616161;
+  line-height: 1.8;
 }
 </style>
