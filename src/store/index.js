@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import ArtsyModel from "../js/artsyModel.js";
-
+/* eslint-disable */
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -93,5 +93,6 @@ export default new Vuex.Store({
     authStatus: (state) => state.status,
     currentToken: (state) => state.token,
     myModel: (state) => state.model,
+    images(state) {return state.images;}
   },
 });
