@@ -3,7 +3,9 @@
     <v-container>
       <v-row>
         <v-col align-self="start">
-          <v-btn class="ma-1">back to search results.</v-btn>
+          <v-btn class="ma-1" @click="navigateBack()"
+            >back to search results.</v-btn
+          >
         </v-col>
       </v-row>
       <v-row class="mt-0">
@@ -156,6 +158,10 @@ export default {
   name: "Details",
   methods: {
     addArtworkToGallery: function () {},
+    // Helper function for navigation
+    navigateBack: function () {
+      this.$router.go(-1);
+    },
   },
   data() {
     return {
