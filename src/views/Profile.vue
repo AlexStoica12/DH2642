@@ -3,27 +3,27 @@
      
     <link rel="stylesheet" type="text/css" href="style.css">
     
-    <div :key="image.url" v-for="(image, i) in images" class="cunt">
+    <div :key="image.url" v-for="(image, i) in images">
 
-    <div v-if="i % 2 == 0" align = "right">
+    <div v-if="i % 2 == 0" align = "right" class="cunt">
       <div>
-        <span class="booo">      {{image.name}} {{image.artist}}         
+        <span class="booo">      {{image.name}}  {{image.artist}}       
 
         
     
-      <img :src="image.url" alt="artwork" align = "right"/>
+      <img :src="image.url" alt="artwork" align = "right" />
       
         </span>
       </div>
       
     </div>
-    <div v-else >
+    <div v-else class="cunt">
         <span class="booo">  {{image.name}} {{image.artist}}   
 
 
         
         
-        <img :src="image.url" alt="artwork" align = "left"/>
+        <img :src="image.url" alt="artwork" align = "left" class="cunt"/>
         </span>
         
         <br/>
@@ -80,12 +80,13 @@ export default {
     line-height: 300px;
 }
 .br {
-            display: block;
+            display: inline-block;
            
         }
 
 .booo {
   line-height: auto;
+  
 }
 img {
     display: block;
