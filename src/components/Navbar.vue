@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar app class="rounded-xl px-5 mx-5 white">
+    <v-app-bar app class="rounded-xl mx-5 white">
       <!-- Logo -->
       <v-toolbar-title class="text-uppercase">
         <span class="font-weight-light">Art</span>
@@ -43,7 +43,7 @@
     </v-app-bar>
 
     <!-- Navigation Drawer for Small Small Screens -->
-    <v-navigation-drawer v-model="drawer" absolute temporary right>
+    <v-navigation-drawer v-model="drawer" app temporary right>
       <v-list nav dense>
         <v-list-item> </v-list-item>
         <v-list-item-group>
