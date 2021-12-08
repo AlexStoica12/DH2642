@@ -50,7 +50,10 @@
               rounded
               elevation="2"
               x-large
-              @click="snackbarAddToGallery = true"
+              @click="
+                (snackbarAddToGallery = true),
+                  addArtworkToGallery(currentArtwork)
+              "
             >
               Add to My Gallery
             </v-btn>
@@ -103,7 +106,9 @@
                     <v-btn
                       color="orange"
                       text
-                      @click="snackbarAddToGallery = true"
+                      @click="
+                        (snackbarAddToGallery = true), addArtworkToGallery()
+                      "
                     >
                       Add to My Gallery
                     </v-btn>
@@ -144,7 +149,9 @@
                     <v-btn
                       color="orange"
                       text
-                      @click="snackbarAddToGallery = true"
+                      @click="
+                        (snackbarAddToGallery = true), addArtworkToGallery()
+                      "
                     >
                       Add to My Gallery
                     </v-btn>
@@ -162,8 +169,15 @@
 <script>
 export default {
   name: "Details",
+  computed: {
+    model: function () {
+      return this.$store.getters.myModel;
+    },
+  },
   methods: {
-    addArtworkToGallery: function () {},
+    addArtworkToGallery: function (artwork) {
+      this.$store.dispatch("addToFavorited", artwork);
+    },
     // Helper function for navigation
     navigateBack: function () {
       this.$router.go(-1);
