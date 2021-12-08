@@ -100,7 +100,7 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: (state) => !!state.token,
-    authStatus: (state) => state.status,
+    status: (state) => state.status,
     currentToken: (state) => state.token,
     myModel: (state) => state.model,
     images(state) {

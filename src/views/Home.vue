@@ -12,7 +12,14 @@
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-row>
+
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="isLoading"
+    ></v-progress-circular>
+
+    <v-row v-else>
       <v-spacer></v-spacer>
       <v-col
         v-for="artwork in artworks"
@@ -21,7 +28,7 @@
         sm="6"
         md="4"
       >
-        <v-card @click="navigateTo('/details')">
+        <v-card @click="navigateTo(artwork)">
           <v-img :src="artwork._links.thumbnail.href" height="300px">
             <span
               class="text-md-subtitle-2 white--text pl-4 pt-4 d-inline-block"
@@ -67,6 +74,7 @@ export default {
   data() {
     return {
       artworks: [],
+      isLoading: true,
       socials: [
         {
           icon: "mdi-facebook",
@@ -83,10 +91,12 @@ export default {
     async searchArtworks() {
       let artworks = await artsySource.searchAllArtworks();
       this.artworks = artworks._embedded.artworks;
+      this.isLoading = false;
     },
     // Helper function for navigation
-    navigateTo: function (route) {
-      this.$router.push(route);
+    navigateTo: function (artwork) {
+      this.$store.dispatch("setCurrentArtwork", artwork.id);
+      this.$router.push("/details");
     },
   },
 };

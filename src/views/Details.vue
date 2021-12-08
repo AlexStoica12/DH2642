@@ -1,6 +1,12 @@
 <template>
   <div>
-    <v-container>
+    <v-progress-circular
+      :size="50"
+      color="primary"
+      indeterminate
+      v-if="isLoading()"
+    ></v-progress-circular>
+    <v-container v-else>
       <v-row>
         <v-col align-self="start">
           <v-btn class="ma-1" @click="navigateBack()"
@@ -161,6 +167,13 @@ export default {
     // Helper function for navigation
     navigateBack: function () {
       this.$router.go(-1);
+    },
+    isLoading: function () {
+      let status = this.$store.getters.status;
+      if (status === "loading" || status === "error") {
+        return true;
+      }
+      return false;
     },
   },
   data() {
