@@ -19,6 +19,17 @@ class ArtsyModel {
     this.currentArtists = currentArtists;
     this.currentSimilarArtworks = currentSimilarArtworks;
   }
+
+  setCurrentArtworkSync(
+    currentArtworkId,
+    currentArtworkDetails,
+    currentSimilarArtworks
+  ) {
+    this.currentArtworkId = currentArtworkId;
+    this.currentArtworkDetails = currentArtworkDetails;
+    this.currentSimilarArtworks = currentSimilarArtworks;
+  }
+
   // Method
   setCurrentArtwork(id) {
     // If model's current artwork and new current artwork is same

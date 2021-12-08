@@ -28,6 +28,9 @@ export default new Vuex.Store({
     auth_error(state) {
       state.status = "error";
     },
+    error(state) {
+      state.status = "error";
+    },
     logout(state) {
       state.status = "";
       state.token = "";
@@ -41,8 +44,8 @@ export default new Vuex.Store({
     setFavoritedArtworks(state, artwork) {
       state.model.setFavoritedArtworks(artwork);
     },
-    setCurrentArtwork(state, artwork) {
-      state.model.setCurrentArtwork(artwork);
+    setCurrentArtwork(state, { id, artworkDetails, similarArtworks }) {
+      state.model.setCurrentArtworkSync(id, artworkDetails, similarArtworks);
     },
   },
   actions: {
@@ -70,10 +73,29 @@ export default new Vuex.Store({
     setFavoritedArtworks({ commit }, artworks) {
       commit("setFavoritedArtworks", artworks);
     },
-    async setCurrentArtwork({ commit }, artwork) {
+    async setCurrentArtwork({ commit }, id) {
       commit("request");
-      commit("setCurrentArtwork", artwork);
-      commit("complete");
+      try {
+        const artwork = await artsySource.searchArtworks(id);
+        const artworkDetails = {
+          id: artwork.id,
+          title: artwork.title,
+          category: artwork.category,
+          medium: artwork.medium,
+          dimensions: artwork.dimensions,
+          _links: artwork._links,
+        };
+        const artworks = await artsySource.searchArtworksParams({
+          similar_to_artwork_id: id,
+        });
+        const similarArtworks = artworks._embedded.artworks;
+
+        commit("setCurrentArtwork", { id, artworkDetails, similarArtworks });
+      } catch (error) {
+        commit("error");
+      } finally {
+        commit("complete");
+      }
     },
   },
   getters: {
