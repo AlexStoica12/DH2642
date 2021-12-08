@@ -106,5 +106,6 @@ export default new Vuex.Store({
     images(state) {
       return state.images;
     },
+    favoritedArtworks: (state) => state.model.favoritedArtworks,
   },
 });

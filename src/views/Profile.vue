@@ -1,75 +1,56 @@
 <template>
   <v-container class="background">
-     
-    
-    
     <v-container :key="image.url" v-for="(image, i) in images">
-
-    <!-- <v-container v-if="i % 2 == 0" align = "right" class="images"> -->
-      <v-col  v-if="i % 2 == 0" class="images" align="right">
-      
+      <!-- <v-container v-if="i % 2 == 0" align = "right" class="images"> -->
+      <v-col v-if="i % 2 == 0" class="images" align="right" contain>
         <!-- <v-row class="sub-image">      {{image.name}}  {{image.artist}}        -->
 
-        
-    
-      <v-img :src="image.url" width="750px" contain="true"/>
-      <v-spacer></v-spacer>
-      
-            <span
-              class="text-md-subtitle-2 black--text pl-4 pt-4 d-inline-block"
-              v-text="image.name + ', ' + image.artist"
-            ></span>
-            <v-divider></v-divider>
+        <v-img :src="image.url" width="750px" />
+        <v-spacer></v-spacer>
 
-          <!-- </v-img> -->
-          
-      
+        <span
+          class="text-md-subtitle-2 black--text pl-4 pt-4 d-inline-block"
+          v-text="image.name + ', ' + image.artist"
+        ></span>
+        <v-divider></v-divider>
+
+        <!-- </v-img> -->
+
         <!-- </v-row> -->
       </v-col>
-      
-      
-    <!-- </v-container> -->
-    <!-- <v-container v-else class="images"> -->
-      <v-col v-else class="images" >
-          
 
-
-        
-        
+      <!-- </v-container> -->
+      <!-- <v-container v-else class="images"> -->
+      <v-col v-else class="images">
         <!-- <img :src="image.url" alt="artwork" align = "left" class="images" @click="directImage"/> -->
-        <v-img   :src="image.url" width="500px" contain="true">
-          </v-img>
-          
-            <span
-              class="text-md-subtitle-2 black--text pl-0 pt-4 d-inline-block"
-              v-text="image.name + ', ' + image.artist"
-            ></span>
-            <v-divider></v-divider>
-          
+        <v-img :src="image.url" width="500px" contain> </v-img>
+
+        <span
+          class="text-md-subtitle-2 black--text pl-0 pt-4 d-inline-block"
+          v-text="image.name + ', ' + image.artist"
+        ></span>
+        <v-divider></v-divider>
+
         <!-- <v-row class="sub-image">  {{image.name}} {{image.artist}} 
         </v-row> -->
-        
       </v-col>
-    <!-- </v-container> -->
+      <!-- </v-container> -->
     </v-container>
-  
-    
-
-
-    
-  
-
-    
   </v-container>
 </template>
 
 <script>
 export default {
+  computed: {
+    favoritedArtworks: function () {
+      return this.$store.getters.favoritedArtworks;
+    },
+  },
   methods: {
     directImage() {
-        //redirect to detailspage
-  }
-},
+      //redirect to detailspage
+    },
+  },
 
   data() {
     return {
@@ -87,7 +68,7 @@ export default {
         {
           url: "https://64.media.tumblr.com/72d06e38a80b674619ed921f185cfbc4/6777aebfef58aa8e-3d/s500x750/5ea3ca6fe1dd8026a6fdd7af1935bb0e4dede37b.png",
           name: "Revenge Cagn",
-          artist: "Lady Skollie"
+          artist: "Lady Skollie",
         },
       ],
     };
@@ -95,23 +76,22 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .background {
-  background: #F5F2F2;
+  background: #f5f2f2;
 }
 
 /* .images {
     line-height: 300px;
 } */
 .br {
-            display: inline-block;
-           
-        }
+  display: inline-block;
+}
 
 .sub-images {
   line-height: auto;
-  
 }
 
+.v-img {
+}
 </style>
