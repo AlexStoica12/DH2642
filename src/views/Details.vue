@@ -92,7 +92,7 @@
             <v-slide-group show-arrows>
               <v-slide-item
                 v-for="artwork in currentSimilarArtworks"
-                :key="artwork.title"
+                :key="artwork.id"
               >
                 <v-card
                   class="ma-2 mb-5 d-flex flex-column"
