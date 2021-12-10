@@ -2,33 +2,35 @@
 <template>
   <v-card flat tile>
     <v-toolbar span>
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
-            <v-text-field 
-                hide-details 
-                label="Type art name"
-                v-model="searchString" 
-                placeholder="Search" 
-                filled 
-                rounded 
-                dense 
-                single-line 
-                append-icon="mdi-magnify" class="shrink mx-4">
-            </v-text-field>
-            <v-btn icon>
-                <v-icon></v-icon>
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-        </v-toolbar>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-text-field
+        hide-details
+        label="Type art name"
+        v-model="searchString"
+        placeholder="Search"
+        filled
+        rounded
+        dense
+        single-line
+        append-icon="mdi-magnify"
+        class="shrink mx-4"
+      >
+      </v-text-field>
+      <v-btn icon>
+        <v-icon></v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn>
+    </v-toolbar>
     <v-container v-if="isLoading">
-    <div class="text-center">
-    <v-progress-circular
-      indeterminate
-      color="primary"
-    ></v-progress-circular>
-    </div>
+      <div class="text-center">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
+      </div>
     </v-container>
     <v-row v-else>
       <v-spacer></v-spacer>
@@ -99,26 +101,27 @@ export default {
     };
   },
   methods: {
-  
-
-
     async searchArtworks() {
-      if(this.$store.getters.currentToken === null & this.$store.getters.status === 401){
-      let sleep = (milliseconds) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds))
-      };
-    //  await artsySource.refreshToken();
-      sleep(4);
-      let artworks = await artsySource.searchAllArtworks();
-      this.artworks = artworks._embedded.artworks;
-      this.isLoading = false;}
+      if (this.$store.getters.currentToken === null) {
+        let sleep = (milliseconds) => {
+          return new Promise((resolve) => setTimeout(resolve, milliseconds));
+        };
+        sleep(100);
+        let artworks = await artsySource.searchAllArtworks();
+        this.artworks = artworks._embedded.artworks;
+        this.isLoading = false;
+      } else {
+        let artworks = await artsySource.searchAllArtworks();
+        this.artworks = artworks._embedded.artworks;
+        this.isLoading = false;
+      }
     },
     // Helper function for navigation
     navigateTo: function (artwork) {
       this.$store.dispatch("setCurrentArtwork", artwork.id);
       this.$router.push("/details");
     },
-  }  
+  },
 };
 </script>
 <style lang="scss" scoped>
