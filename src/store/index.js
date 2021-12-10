@@ -92,7 +92,17 @@ export default new Vuex.Store({
           commit("setError", error.message);
         });
     },
-
+    signInAction({ commit }, payload) {
+      return firebase
+        .auth()
+        .signInWithEmailAndPassword(payload.email, payload.password)
+        .then((response) => {
+          commit("setUser", response.user);
+        })
+        .catch((error) => {
+          commit("setError", error.message);
+        });
+    },
     // Model
     addToFavorited({ commit }, artwork) {
       commit("addToFavorited", artwork);
@@ -137,5 +147,14 @@ export default new Vuex.Store({
       return state.images;
     },
     favoritedArtworks: (state) => state.model.favoritedArtworks,
+    getUser(state) {
+      return state.user;
+    },
+    isUserAuth(state) {
+      return !!state.user;
+    },
+    getError(state) {
+      return state.error;
+    },
   },
 });
