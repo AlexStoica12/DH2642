@@ -25,7 +25,9 @@
         <v-col cols="8">
           <v-sheet color="white" min-height="70vh" rounded="lg">
             <h1 class="pa-3">{{ currentArtworkDetails.title }}</h1>
-            <h2 class="pa-3 pt-0">{{ currentArtworkDetails.title }}</h2>
+            <h2 class="pa-3 pt-0">
+              {{ currentArtists._embedded.artists[0].name }}
+            </h2>
             <v-img
               contain
               class="pa-10"
@@ -143,6 +145,58 @@
           </v-sheet>
         </v-col>
       </v-row>
+      <v-row class="pa-0">
+        <v-col>
+          <v-sheet color="white" min-height="20vh" rounded="lg" class="pt-0">
+            <h3 class="pa-4">Other works from the artis</h3>
+            <v-slide-group show-arrows>
+              <v-slide-item
+                v-for="artwork in artworksCurrentArtist"
+                :key="artwork.id"
+              >
+                <v-card
+                  v-if="
+                    artwork._links.thumbnail.href !==
+                    currentArtworkDetails._links.thumbnail.href
+                  "
+                  class="ma-2 mb-5 d-flex flex-column"
+                  height="325"
+                  width="300"
+                  hover
+                  @click="navigateTo(artwork)"
+                >
+                  <v-img
+                    class="white--text align-end"
+                    height="200px"
+                    :src="artwork._links.thumbnail.href"
+                  >
+                  </v-img>
+                  <v-card-text class="pb-0">
+                    <div style="width: 200px">
+                      <p class="overflow-x-auto font-weight-medium">
+                        {{ artwork.title }}
+                      </p>
+                    </div>
+                  </v-card-text>
+                  <v-spacer></v-spacer>
+                  <v-card-actions>
+                    <v-btn
+                      color="orange"
+                      text
+                      @click.stop="
+                        snackbarAddToGallery = true;
+                        addArtworkToGallery(artwork);
+                      "
+                    >
+                      Add to My Gallery
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-slide-item>
+            </v-slide-group>
+          </v-sheet>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -156,6 +210,12 @@ export default {
     },
     currentSimilarArtworks: function () {
       return this.$store.getters.myModel.currentSimilarArtworks;
+    },
+    currentArtists: function () {
+      return this.$store.getters.myModel.currentArtists;
+    },
+    artworksCurrentArtist: function () {
+      return this.$store.getters.myModel.artworksCurrentArtist;
     },
   },
   methods: {
@@ -177,7 +237,6 @@ export default {
     },
     navigateTo: function (artwork) {
       this.$store.dispatch("setCurrentArtwork", artwork.id);
-      console.log(this.$router.currentRoute.path);
       if (this.$router.currentRoute.path !== "/details") {
         this.$router.push("/details");
       }

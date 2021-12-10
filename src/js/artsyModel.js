@@ -10,24 +10,30 @@ class ArtsyModel {
     currentArtworkId = null,
     // artist is an array of object containing id, name, birthday, deathday, biography, nationality
     currentArtists = null,
-    currentSimilarArtworks = null
+    currentSimilarArtworks = null,
+    artworksCurrentArtist = null
   ) {
     this.favoritedArtworks = favoritedArtworks;
     this.currentArtworkDetails = currentArtworkDetails;
     this.currentArtworkError = currentArtworkError;
     this.currentArtworkId = currentArtworkId;
     this.currentArtists = currentArtists;
+    this.artworksCurrentArtist = artworksCurrentArtist;
     this.currentSimilarArtworks = currentSimilarArtworks;
   }
 
   setCurrentArtworkSync(
     currentArtworkId,
     currentArtworkDetails,
-    currentSimilarArtworks
+    currentSimilarArtworks,
+    currentArtists,
+    artworksCurrentArtist
   ) {
     this.currentArtworkId = currentArtworkId;
     this.currentArtworkDetails = currentArtworkDetails;
     this.currentSimilarArtworks = currentSimilarArtworks;
+    this.currentArtists = currentArtists;
+    this.artworksCurrentArtist = artworksCurrentArtist;
   }
 
   // Method

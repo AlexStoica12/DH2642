@@ -53,8 +53,8 @@ export default new Vuex.Store({
     setFavoritedArtworks(state, artwork) {
       state.model.setFavoritedArtworks(artwork);
     },
-    setCurrentArtwork(state, { id, artworkDetails, similarArtworks }) {
-      state.model.setCurrentArtworkSync(id, artworkDetails, similarArtworks);
+    setCurrentArtwork(state, { id, artworkDetails, similarArtworks, artists, artworksArtist}) {
+      state.model.setCurrentArtworkSync(id, artworkDetails, similarArtworks, artists, artworksArtist);
     },
     // Firebase
     setUser(state, payload) {
@@ -105,12 +105,18 @@ export default new Vuex.Store({
           dimensions: artwork.dimensions,
           _links: artwork._links,
         };
+
         const artworks = await artsySource.searchArtworksParams({
           similar_to_artwork_id: id,
+          size: 10,
         });
+        const artists = await artsySource.searchArtistParams({artwork_id: artwork.id})
         const similarArtworks = artworks._embedded.artworks;
+        const artistID = artists._embedded.artists[0].id
+        const artworksArtistResult = await artsySource.searchArtworksParams({artist_id: artistID, size: 10})
+        const artworksArtist = artworksArtistResult._embedded.artworks
 
-        commit("setCurrentArtwork", { id, artworkDetails, similarArtworks });
+        commit("setCurrentArtwork", { id, artworkDetails, similarArtworks, artists, artworksArtist});
       } catch (error) {
         commit("error");
       } finally {
