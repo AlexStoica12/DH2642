@@ -27,7 +27,7 @@
       <v-toolbar-items>
         <v-btn
           plain
-          @click="navigateTo('/')"
+          @click="dialog = !dialog"
           class="white hidden-xs-only"
           style="width: 100px"
         >
@@ -36,10 +36,14 @@
       </v-toolbar-items>
 
       <!-- Logic for the drawer (only visible on xs screens) -->
+      <v-btn icon class="hidden-sm-and-up" @click="dialog = !dialog">
+        <v-icon>mdi-account</v-icon>
+      </v-btn>
       <v-app-bar-nav-icon
         class="grey--text hidden-sm-and-up"
         @click="drawer = !drawer"
-      ></v-app-bar-nav-icon>
+      >
+      </v-app-bar-nav-icon>
     </v-app-bar>
 
     <!-- Navigation Drawer for Small Small Screens -->
@@ -58,32 +62,37 @@
             </v-list-item-icon>
             <v-list-item-title>{{ link.text }}</v-list-item-title>
           </v-list-item>
-
-          <!-- Profile Tab -->
-          <v-list-item @click="navigateTo('/')">
-            <v-list-item-icon>
-              <v-icon></v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Profile</v-list-item-title>
-          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+    <SignIn v-bind:mode="mode" v-bind:dialog="dialog" />
   </nav>
 </template>
 
 <script>
+import SignIn from "../components/Signin.vue";
 export default {
   name: "Navbar",
+  components: { SignIn },
   data() {
     return {
       drawer: false,
+      dialog: false,
       links: [
         { icon: "mdi-home", text: "Explore", route: "/home" },
         { icon: "mdi-home", text: "My Gallery", route: "/profile" },
         // { icon: "mdi-account", text: "Sign In", route: "/signin" },
       ],
     };
+  },
+  computed: {
+    mode: function () {
+      if (this.$store.getters.isUserLoggedIn === null) {
+        return "sign-up";
+      } else {
+        return "sign-in";
+      }
+    },
   },
   methods: {
     // Helper function for navigation

@@ -171,6 +171,7 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: (state) => !!state.token,
+    isUserLoggedIn: (state) => state.user,
     status: (state) => state.status,
     currentToken: (state) => state.token,
     myModel: (state) => state.model,

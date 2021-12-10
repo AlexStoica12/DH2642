@@ -68,14 +68,13 @@
 <script>
 export default {
   name: "Signin",
+  props: ["mode", "dialog"],
   data() {
     return {
       firstName: "",
       lastName: "",
       email: "",
       password: "",
-      dialog: true,
-      mode: "sign-in",
     };
   },
   computed: {},
