@@ -82,11 +82,13 @@ export default new Vuex.Store({
         });
     },
     // Model
-    addToFavorited({ commit }, artwork) {
+    addToFavorited({ commit, dispatch }, artwork) {
       commit("addToFavorited", artwork);
+      dispatch("saveUserData");
     },
-    removeFromFavorited({ commit }, artwork) {
+    removeFromFavorited({ commit, dispatch }, artwork) {
       commit("removeFromFavorited", artwork);
+      dispatch("saveUserData");
     },
     setFavoritedArtworks({ commit }, artworks) {
       commit("setFavoritedArtworks", artworks);
@@ -138,9 +140,9 @@ export default new Vuex.Store({
           commit("setError", error.message);
         });
     },
-    async loadUserData({ commit, state, dispatch }) {
+    async loadUserData({ commit, state }) {
       const favoritedArtworks = await firebaseModel.loadUserData(state.user);
-      dispatch("setFavoritedArtworks", favoritedArtworks);
+      commit("setFavoritedArtworks", favoritedArtworks);
     },
     async saveUserData({ commit, state }) {
       await firebaseModel.saveUserData(state.user, state.model);

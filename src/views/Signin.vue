@@ -33,7 +33,7 @@
               class="my-3"
             ></v-text-field>
             <!-- Sign In -->
-            <v-btn id="btn" class="my-3" @click="signup"> Sign In </v-btn>
+            <v-btn id="btn" class="my-3" @click="signin"> Sign In </v-btn>
             <!-- Already have an account -->
             <p class="grey--text text--darken-3">Already have an account?</p>
             <v-btn @click="addToDatabase">Add</v-btn>
@@ -55,11 +55,13 @@ export default {
     };
   },
   methods: {
-    signup() {
-      this.$store.dispatch("signInAction", {
-        email: this.email,
-        password: this.password,
-      });
+    signin() {
+      this.$store
+        .dispatch("signInAction", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(() => this.$store.dispatch("loadUserData"));
     },
     addToDatabase() {
       this.$store.dispatch("saveUserData");
