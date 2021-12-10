@@ -1,59 +1,84 @@
 <template>
-  <v-container class="fill-height pa-0 ma-0" fluid>
-    <v-row class="fill-height wrap">
-      <!-- Left Side -->
-      <v-col id="left" cols="12" md="5" class="rounded-xl">
-        <h3 class="my-10 mx-16">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores,
-          totam quisquam nam ea velit consectetur ipsum fugiat cum illo hic
-          laboriosam quasi molestias id sequi inventore sed aliquid magnam
-          cumque.
-        </h3>
-      </v-col>
-      <!-- Right Side -->
-      <v-col id="right" cols="12" md="7" align="center">
-        <v-row align="center" justify="center" class="mx-8 mx-md-16">
-          <v-col class="px-16" cols="12">
-            <!-- Title -->
-            <h1 class="my-5 mb-16">Sign In</h1>
-            <!-- Username Text Field -->
-            <v-text-field
-              v-model="email"
-              solo
-              label="Username..."
-              clearable
-              class="my-3"
-            ></v-text-field>
-            <!-- Password Text Field -->
-            <v-text-field
-              v-model="password"
-              solo
-              label="Password..."
-              clearable
-              class="my-3"
-            ></v-text-field>
-            <!-- Sign In -->
-            <v-btn id="btn" class="my-3" @click="signin"> Sign In </v-btn>
-            <!-- Already have an account -->
-            <p class="grey--text text--darken-3">Already have an account?</p>
-            <v-btn @click="addToDatabase">Add</v-btn>
-            <v-btn @click="getDatabase">get</v-btn>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
-</template>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <h1 v-if="mode === 'sign-up'" class="text-h5">Sign Up</h1>
+          <h1 v-if="mode === 'sign-in'" class="text-h5">Sign In</h1>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field
+                  label="First name*"
+                  required
+                  v-model="firstName"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field
+                  label="Last name*"
+                  required
+                  v-model="lastName"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Email*"
+                  required
+                  v-model="email"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Password*"
+                  type="password"
+                  required
+                  v-model="password"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          <p>*indicates required field</p>
+        </v-card-text>
 
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="dialog = false"> Continue As Guest </v-btn>
+          <v-btn v-if="mode === 'sign-in'" text @click="dialog = false">
+            Login
+          </v-btn>
+          <v-btn v-if="mode === 'sign-up'" text @click="dialog = false">
+            Sign Up
+          </v-btn>
+        </v-card-actions>
+        <v-col class="d-flex align-end flex-column">
+          <v-btn v-if="mode === 'sign-up'" text @click="dialog = false"
+            >Already have an account?</v-btn
+          >
+          <v-btn v-if="mode === 'sign-in'" text @click="dialog = false"
+            >Don't have an account?</v-btn
+          >
+        </v-col>
+      </v-card>
+    </v-dialog>
+  </v-row>
+</template>
 <script>
 export default {
   name: "Signin",
   data() {
     return {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
+      dialog: true,
+      mode: "sign-in",
     };
   },
+  computed: {},
   methods: {
     signin() {
       this.$store
@@ -73,22 +98,4 @@ export default {
 };
 </script>
 
-<style scoped>
-#left {
-  background: url("../assets/green-leaf.jpg");
-  background-position: left;
-  background-size: cover;
-}
-
-.v-btn {
-  width: 100%;
-}
-
-/* If x>960px */
-@media (min-width: 960px) {
-  .v-text-field,
-  .v-btn {
-    width: 75%;
-  }
-}
-</style>
+<style scoped></style>
