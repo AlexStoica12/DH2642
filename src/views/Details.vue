@@ -76,11 +76,21 @@
                   color="blue"
                   text
                   v-bind="attrs"
-                  @click="snackbarAddToGallery = false"
+                  @click="
+                    removeCurrentAddedArtworkFromGallery();
+                    snackbarCancelAddToGallery = true;
+                    snackbarAddToGallery = false;
+                  "
                 >
-                  Close
+                  Undo
                 </v-btn>
               </template>
+            </v-snackbar>
+            <v-snackbar
+              v-model="snackbarCancelAddToGallery"
+              :timeout="timeoutSnackbarCancelAddToGallery"
+            >
+              Removed artwork from gallery
             </v-snackbar>
           </v-sheet>
         </v-col>
@@ -150,7 +160,12 @@ export default {
   },
   methods: {
     addArtworkToGallery: function (artwork) {
+      this.currentArtworkAdded = artwork;
       this.$store.dispatch("addToFavorited", artwork);
+    },
+    removeCurrentAddedArtworkFromGallery: function () {
+      this.$store.dispatch("removeFromFavorited", this.currentArtworkAdded);
+      this.currentArtworkAdded = null;
     },
     // Helper function for navigation
     navigateBack: function () {
@@ -172,7 +187,10 @@ export default {
     return {
       loading: true,
       snackbarAddToGallery: false,
+      snackbarCancelAddToGallery: false,
+      currentArtworkAdded: null,
       timeoutSnackbarAddToGallery: 2000,
+      timeoutSnackbarCancelAddToGallery: 1000,
       currentArtwork: {
         price: "Price",
         gallery: "Name of the gallery",
