@@ -106,40 +106,15 @@
                 v-for="artwork in currentSimilarArtworks"
                 :key="artwork.id"
               >
-                <v-card
-                  class="ma-2 mb-5 d-flex flex-column"
-                  height="325"
-                  width="300"
-                  hover
-                  @click="navigateTo(artwork)"
-                >
-                  <v-img
-                    class="white--text align-end"
-                    height="200px"
-                    :src="getLinkImage(artwork)"
-                  >
-                  </v-img>
-                  <v-card-text class="pb-0">
-                    <div style="width: 200px">
-                      <p class="overflow-x-auto font-weight-medium">
-                        {{ artwork.title }}
-                      </p>
-                    </div>
-                  </v-card-text>
-                  <v-spacer></v-spacer>
-                  <v-card-actions>
-                    <v-btn
-                      color="orange"
-                      text
-                      @click.stop="
-                        snackbarAddToGallery = true;
-                        addArtworkToGallery(artwork);
-                      "
-                    >
-                      Add to My Gallery
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
+                <DetailsCard
+                  v-bind:image-u-r-l="getLinkImage(artwork)"
+                  v-bind:artwork-title="artwork.title"
+                  @addArtworkToGalleryEvent="addArtworkToGallery(artwork)"
+                  @navigateToEvent="navigateTo(artwork)"
+                  @activateSnackbarAddToGalleryEvent="
+                    activateSnackbarAddToGallery()
+                  "
+                />
               </v-slide-item>
             </v-slide-group>
           </v-sheet>
@@ -154,44 +129,15 @@
                 v-for="artwork in artworksCurrentArtist"
                 :key="artwork.id"
               >
-                <v-card
-                  v-if="
-                    getLinkImage(artwork) !==
-                    getLinkImage(currentArtworkDetails)
+                <DetailsCard
+                  v-bind:image-u-r-l="getLinkImage(artwork)"
+                  v-bind:artwork-title="artwork.title"
+                  @addArtworkToGalleryEvent="addArtworkToGallery(artwork)"
+                  @navigateToEvent="navigateTo(artwork)"
+                  @activateSnackbarAddToGalleryEvent="
+                    activateSnackbarAddToGallery()
                   "
-                  class="ma-2 mb-5 d-flex flex-column"
-                  height="325"
-                  width="300"
-                  hover
-                  @click="navigateTo(artwork)"
-                >
-                  <v-img
-                    class="white--text align-end"
-                    height="200px"
-                    :src="getLinkImage(artwork)"
-                  >
-                  </v-img>
-                  <v-card-text class="pb-0">
-                    <div style="width: 200px">
-                      <p class="overflow-x-auto font-weight-medium">
-                        {{ artwork.title }}
-                      </p>
-                    </div>
-                  </v-card-text>
-                  <v-spacer></v-spacer>
-                  <v-card-actions>
-                    <v-btn
-                      color="orange"
-                      text
-                      @click.stop="
-                        snackbarAddToGallery = true;
-                        addArtworkToGallery(artwork);
-                      "
-                    >
-                      Add to My Gallery
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
+                />
               </v-slide-item>
             </v-slide-group>
           </v-sheet>
@@ -202,8 +148,10 @@
 </template>
 
 <script>
+import DetailsCard from "../components/detailsCard.vue";
 export default {
   name: "Details",
+  components: {DetailsCard},
   computed: {
     currentArtworkDetails: function () {
       return this.$store.getters.myModel.currentArtworkDetails;
@@ -233,6 +181,9 @@ export default {
     removeCurrentAddedArtworkFromGallery: function () {
       this.$store.dispatch("removeFromFavorited", this.currentArtworkAdded);
       this.currentArtworkAdded = null;
+    },
+    activateSnackbarAddToGallery: function () {
+      this.snackbarAddToGallery = true;
     },
     // Helper function for navigation
     navigateBack: function () {
