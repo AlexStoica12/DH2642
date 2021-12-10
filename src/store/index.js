@@ -129,23 +129,44 @@ export default new Vuex.Store({
           commit("setError", error.message);
         });
     },
-    signInAction({ commit }, payload) {
-      return firebase
+    signInAction({ commit, dispatch }, payload) {
+      firebase
         .auth()
         .signInWithEmailAndPassword(payload.email, payload.password)
         .then((response) => {
           commit("setUser", response.user);
+          dispatch("loadUserData");
         })
         .catch((error) => {
-          commit("setError", error.message);
+          commit("error");
         });
     },
     async loadUserData({ commit, state }) {
-      const favoritedArtworks = await firebaseModel.loadUserData(state.user);
-      commit("setFavoritedArtworks", favoritedArtworks);
+      if (state.user !== null) {
+        commit("request");
+        try {
+          const favoritedArtworks = await firebaseModel.loadUserData(
+            state.user
+          );
+          commit("setFavoritedArtworks", favoritedArtworks);
+        } catch (error) {
+          commit("error");
+        } finally {
+          commit("complete");
+        }
+      }
     },
     async saveUserData({ commit, state }) {
-      await firebaseModel.saveUserData(state.user, state.model);
+      if (state.user !== null) {
+        commit("request");
+        try {
+          await firebaseModel.saveUserData(state.user, state.model);
+        } catch (error) {
+          commit("error");
+        } finally {
+          commit("complete");
+        }
+      }
     },
   },
   getters: {
