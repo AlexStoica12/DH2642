@@ -103,6 +103,7 @@ export default new Vuex.Store({
           category: artwork.category,
           medium: artwork.medium,
           dimensions: artwork.dimensions,
+          collecting_institution: artwork.collecting_institution,
           _links: artwork._links,
         };
 

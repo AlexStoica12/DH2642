@@ -51,7 +51,7 @@
             </div>
             <div>
               <h1 class="pl-4 pt-5">Gallery</h1>
-              <h2 class="pl-4">{{ currentArtwork.gallery }}</h2>
+              <h2 class="pl-4">{{ currentArtworkDetails.collecting_institution }}</h2>
             </div>
             <v-spacer></v-spacer>
             <v-btn
