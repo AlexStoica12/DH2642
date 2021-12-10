@@ -37,6 +37,7 @@
             <!-- Already have an account -->
             <p class="grey--text text--darken-3">Already have an account?</p>
             <v-btn @click="addToDatabase">Add</v-btn>
+            <v-btn @click="getDatabase">get</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -61,13 +62,22 @@ export default {
         email: this.email,
         password: this.password,
       });
+      // .then(this.$store.dispatch("loadUserData"));
     },
     addToDatabase() {
       const db = firebase.database();
       db.ref("artsyModel/" + this.$store.getters.getUser._delegate.uid).set({
-        email: this.email,
-        password: this.password,
+        favoritedArtworks: this.$store.getters.myModel.favoritedArtworks,
       });
+    },
+    getDatabase() {
+      const db = firebase.database();
+      db.ref("artsyModel/" + this.$store.getters.getUser._delegate.uid)
+        .once("value")
+        .then(function (snapshot) {
+          // this.$store.dispatch("setFavoritedArtworks", snapshot.val());
+          console.log(snapshot.val());
+        });
     },
   },
 };

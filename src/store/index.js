@@ -80,29 +80,6 @@ export default new Vuex.Store({
           localStorage.removeItem("token");
         });
     },
-    // Firebase
-    signUpAction({ commit }, payload) {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(payload.email, payload.password)
-        .then((response) => {
-          commit("setUser", response.user);
-        })
-        .catch((error) => {
-          commit("setError", error.message);
-        });
-    },
-    signInAction({ commit }, payload) {
-      return firebase
-        .auth()
-        .signInWithEmailAndPassword(payload.email, payload.password)
-        .then((response) => {
-          commit("setUser", response.user);
-        })
-        .catch((error) => {
-          commit("setError", error.message);
-        });
-    },
     // Model
     addToFavorited({ commit }, artwork) {
       commit("addToFavorited", artwork);
@@ -136,6 +113,37 @@ export default new Vuex.Store({
       } finally {
         commit("complete");
       }
+    },
+    // Firebase
+    signUpAction({ commit }, payload) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(payload.email, payload.password)
+        .then((response) => {
+          commit("setUser", response.user);
+        })
+        .catch((error) => {
+          commit("setError", error.message);
+        });
+    },
+    signInAction({ commit }, payload) {
+      return firebase
+        .auth()
+        .signInWithEmailAndPassword(payload.email, payload.password)
+        .then((response) => {
+          commit("setUser", response.user);
+        })
+        .catch((error) => {
+          commit("setError", error.message);
+        });
+    },
+    loadUserData({ commit }) {
+      // Insert Code
+      // this.model.favoritedArtworks = {firebase funky business}
+    },
+    saveUserData({ commit }) {
+      // Insert Code
+      // {firebase funky business} = this.model.favoritedArtworks
     },
   },
   getters: {
