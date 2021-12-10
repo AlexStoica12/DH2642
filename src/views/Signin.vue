@@ -18,7 +18,7 @@
             <h1 class="my-5 mb-16">Sign In</h1>
             <!-- Username Text Field -->
             <v-text-field
-              v-model="username"
+              v-model="email"
               solo
               label="Username..."
               clearable
@@ -44,27 +44,22 @@
 </template>
 
 <script>
-import firebase from "firebase/compat/app";
+// import firebase from "firebase/compat/app";
 
 export default {
   name: "Signin",
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
     };
   },
   methods: {
     signup() {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then((response) => {
-          console.log("Success! ", response);
-        })
-        .catch((error) => {
-          console.log("Failed!", error);
-        });
+      this.$store.dispatch("signUpAction", {
+        email: this.email,
+        password: this.password,
+      });
     },
   },
 };
