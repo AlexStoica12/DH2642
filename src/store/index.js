@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import ArtsyModel from "../js/artsyModel.js";
 import artsySource from "../js/artsySource.js";
 import firebase from "firebase/compat/app";
+import firebaseModel from "../js/firebaseModel.js";
 /* eslint-disable */
 Vue.use(Vuex);
 
@@ -137,19 +138,12 @@ export default new Vuex.Store({
           commit("setError", error.message);
         });
     },
-    loadUserData({ commit, state, dispatch }) {
-      const db = firebase.database();
-      db.ref("artsyModel/" + state.user._delegate.uid)
-        .once("value")
-        .then(function (snapshot) {
-          dispatch("setFavoritedArtworks", snapshot.val().favoritedArtworks);
-        });
+    async loadUserData({ commit, state, dispatch }) {
+      const favoritedArtworks = await firebaseModel.loadUserData(state.user);
+      dispatch("setFavoritedArtworks", favoritedArtworks);
     },
-    saveUserData({ commit, state }) {
-      const db = firebase.database();
-      db.ref("artsyModel/" + state.user._delegate.uid).set({
-        favoritedArtworks: state.model.favoritedArtworks,
-      });
+    async saveUserData({ commit, state }) {
+      await firebaseModel.saveUserData(state.user, state.model);
     },
   },
   getters: {
