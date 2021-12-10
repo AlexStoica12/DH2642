@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import ArtsyModel from "../js/artsyModel.js";
+import artsySource from "../js/artsySource.js";
 /* eslint-disable */
 Vue.use(Vuex);
 
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     auth_error(state) {
       state.status = "error";
     },
+    error(state) {
+      state.status = "error";
+    },
     logout(state) {
       state.status = "";
       state.token = "";
@@ -40,38 +44,25 @@ export default new Vuex.Store({
     setFavoritedArtworks(state, artwork) {
       state.model.setFavoritedArtworks(artwork);
     },
-    setCurrentArtwork(state, artwork) {
-      state.model.setCurrentArtwork(artwork);
+    setCurrentArtwork(state, { id, artworkDetails, similarArtworks }) {
+      state.model.setCurrentArtworkSync(id, artworkDetails, similarArtworks);
     },
   },
   actions: {
     login({ commit }) {
-      return new Promise((resolve, reject) => {
-        commit("auth_request");
-        fetch(
-          "https://api.artsy.net/api/tokens/xapp_token?client_id=13d34ce7f1970b2cdb6c&client_secret=86fa3ab3fc163a22b49f3ec8944898b0",
-          {
-            method: "POST",
-          }
-        )
-          .then((resp) => {
-            resp.json().then((data) => {
-              let token = data.token;
-              localStorage.setItem("token", data);
-              commit("auth_success", token);
-              console.log(
-                "I am now commiting a login. Your token is: ",
-                data.token
-              );
-            });
-            resolve(resp);
-          })
-          .catch((err) => {
-            commit("auth_error");
-            localStorage.removeItem("token");
-            reject(err);
-          });
-      });
+      commit("auth_request");
+      artsySource
+        .refreshToken()
+        .then((data) => {
+          let token = data.token;
+          console.log("Committing Login, your token is:", token);
+          localStorage.setItem("token", token);
+          commit("auth_success", token);
+        })
+        .catch((err) => {
+          commit("auth_error");
+          localStorage.removeItem("token");
+        });
     },
     addToFavorited({ commit }, artwork) {
       commit("addToFavorited", artwork);
@@ -82,17 +73,39 @@ export default new Vuex.Store({
     setFavoritedArtworks({ commit }, artworks) {
       commit("setFavoritedArtworks", artworks);
     },
-    async setCurrentArtwork({ commit }, artwork) {
+    async setCurrentArtwork({ commit }, id) {
       commit("request");
-      commit("setCurrentArtwork", artwork);
-      commit("complete");
+      try {
+        const artwork = await artsySource.searchArtworks(id);
+        const artworkDetails = {
+          id: artwork.id,
+          title: artwork.title,
+          category: artwork.category,
+          medium: artwork.medium,
+          dimensions: artwork.dimensions,
+          _links: artwork._links,
+        };
+        const artworks = await artsySource.searchArtworksParams({
+          similar_to_artwork_id: id,
+        });
+        const similarArtworks = artworks._embedded.artworks;
+
+        commit("setCurrentArtwork", { id, artworkDetails, similarArtworks });
+      } catch (error) {
+        commit("error");
+      } finally {
+        commit("complete");
+      }
     },
   },
   getters: {
     isLoggedIn: (state) => !!state.token,
-    authStatus: (state) => state.status,
+    status: (state) => state.status,
     currentToken: (state) => state.token,
     myModel: (state) => state.model,
-    images(state) {return state.images;}
+    images(state) {
+      return state.images;
+    },
+    favoritedArtworks: (state) => state.model.favoritedArtworks,
   },
 });

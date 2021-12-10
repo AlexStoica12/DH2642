@@ -1,6 +1,19 @@
 <template>
   <div>
-    <v-container>
+    <v-main v-if="isLoading()">
+      <v-container fill-height fluid>
+        <v-row align="center" justify="center">
+          <v-col align="center">
+            <v-progress-circular
+              :size="50"
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+    <v-container v-else>
       <v-row>
         <v-col align-self="start">
           <v-btn class="ma-1" @click="navigateBack()"
@@ -11,13 +24,13 @@
       <v-row class="mt-0">
         <v-col cols="8">
           <v-sheet color="white" min-height="70vh" rounded="lg">
-            <h1 class="pa-3">{{ currentArtwork.artworkName }}</h1>
-            <h2 class="pa-3 pt-0">{{ currentArtwork.artist }}</h2>
+            <h1 class="pa-3">{{ currentArtworkDetails.title }}</h1>
+            <h2 class="pa-3 pt-0">{{ currentArtworkDetails.title }}</h2>
             <v-img
               contain
               class="pa-10"
               max-height="55vh"
-              :src="currentArtwork.image"
+              :src="currentArtworkDetails._links.thumbnail.href"
               position="center center"
             ></v-img>
           </v-sheet>
@@ -26,7 +39,9 @@
           <v-sheet color="white" min-height="70vh" rounded="lg">
             <div class="pt-16">
               <h1 class="pl-4 pt-10">Dimensions</h1>
-              <h2 class="pl-4">{{ currentArtwork.dimensions }}</h2>
+              <h2 class="pl-4">
+                {{ currentArtworkDetails.dimensions.cm.text }}
+              </h2>
             </div>
             <div>
               <h1 class="pl-4 pt-5">Price</h1>
@@ -44,7 +59,10 @@
               rounded
               elevation="2"
               x-large
-              @click="snackbarAddToGallery = true"
+              @click="
+                snackbarAddToGallery = true;
+                addArtworkToGallery(currentArtworkDetails);
+              "
             >
               Add to My Gallery
             </v-btn>
@@ -72,23 +90,27 @@
           <v-sheet color="white" min-height="20vh" rounded="lg" class="pt-0">
             <h3 class="pa-4">Similar works</h3>
             <v-slide-group show-arrows>
-              <v-slide-item v-for="n in similarWorks" :key="n.title">
+              <v-slide-item
+                v-for="artwork in currentSimilarArtworks"
+                :key="artwork.id"
+              >
                 <v-card
                   class="ma-2 mb-5 d-flex flex-column"
                   height="325"
                   width="300"
                   hover
+                  @click="navigateTo(artwork)"
                 >
                   <v-img
                     class="white--text align-end"
                     height="200px"
-                    :src="n.thumbnail"
+                    :src="artwork._links.thumbnail.href"
                   >
                   </v-img>
                   <v-card-text class="pb-0">
                     <div style="width: 200px">
                       <p class="overflow-x-auto font-weight-medium">
-                        {{ n.title }}
+                        {{ artwork.title }}
                       </p>
                     </div>
                   </v-card-text>
@@ -97,48 +119,10 @@
                     <v-btn
                       color="orange"
                       text
-                      @click="snackbarAddToGallery = true"
-                    >
-                      Add to My Gallery
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-slide-item>
-            </v-slide-group>
-          </v-sheet>
-        </v-col>
-      </v-row>
-      <v-row class="pa-0">
-        <v-col>
-          <v-sheet color="white" min-height="20vh" rounded="lg" class="pt-0">
-            <h3 class="pa-4">Similar works</h3>
-            <v-slide-group show-arrows>
-              <v-slide-item v-for="n in similarWorks" :key="n.title">
-                <v-card
-                  class="ma-2 mb-5 d-flex flex-column"
-                  height="325"
-                  width="300"
-                  hover
-                >
-                  <v-img
-                    class="white--text align-end"
-                    height="200px"
-                    :src="n.thumbnail"
-                  >
-                  </v-img>
-                  <v-card-text class="pb-0">
-                    <div style="width: 200px">
-                      <p class="overflow-x-auto font-weight-medium">
-                        {{ n.title }}
-                      </p>
-                    </div>
-                  </v-card-text>
-                  <v-spacer></v-spacer>
-                  <v-card-actions>
-                    <v-btn
-                      color="orange"
-                      text
-                      @click="snackbarAddToGallery = true"
+                      @click.stop="
+                        snackbarAddToGallery = true;
+                        addArtworkToGallery(artwork);
+                      "
                     >
                       Add to My Gallery
                     </v-btn>
@@ -156,56 +140,43 @@
 <script>
 export default {
   name: "Details",
+  computed: {
+    currentArtworkDetails: function () {
+      return this.$store.getters.myModel.currentArtworkDetails;
+    },
+    currentSimilarArtworks: function () {
+      return this.$store.getters.myModel.currentSimilarArtworks;
+    },
+  },
   methods: {
-    addArtworkToGallery: function () {},
+    addArtworkToGallery: function (artwork) {
+      this.$store.dispatch("addToFavorited", artwork);
+    },
     // Helper function for navigation
     navigateBack: function () {
-      this.$router.go(-1);
+      this.$router.push("/home");
+    },
+    isLoading: function () {
+      let status = this.$store.getters.status;
+      return status === "loading" || status === "error";
+    },
+    navigateTo: function (artwork) {
+      this.$store.dispatch("setCurrentArtwork", artwork.id);
+      console.log(this.$router.currentRoute.path);
+      if (this.$router.currentRoute.path !== "/details") {
+        this.$router.push("/details");
+      }
     },
   },
   data() {
     return {
+      loading: true,
       snackbarAddToGallery: false,
       timeoutSnackbarAddToGallery: 2000,
       currentArtwork: {
-        image:
-          "https://d32dm0rphc51dk.cloudfront.net/dTGcd0Xx0aEp_MDFdHIUIw/larger.jpg",
-        artworkName: "The Old Violin",
-        artist: "William Michael Harnett",
         price: "Price",
         gallery: "Name of the gallery",
-        galleryAddress: "National Gallery of Art, Washington D.C.",
-        dimensions: "96.5 × 60 cm",
       },
-      similarWorks: [
-        {
-          title: "Green River Cliffs, Wyoming",
-          thumbnail:
-            "https://d32dm0rphc51dk.cloudfront.net/ajqWTqyPas0pM7BosKMgUA/medium.jpg",
-        },
-        {
-          title: "U.S. Thread Company Mills, Willimantic, Connecticut",
-          thumbnail:
-            "https://d32dm0rphc51dk.cloudfront.net/67ssKdY1utPgRnTky40Q9Q/medium.jpg",
-        },
-        {
-          title: "View of the Tiber near Perugia",
-          thumbnail:
-            "https://d32dm0rphc51dk.cloudfront.net/_E0H6k-BlFE81xPuMiNjyg/medium.jpg",
-        },
-        {
-          title: "Breakfast",
-          thumbnail:
-            "https://d32dm0rphc51dk.cloudfront.net/MoR7cUheG5Iv4cM1HeR3CQ/medium.jpg",
-        },
-        {
-          title: "Cattleya Orchid and Three Hummingbirds",
-          thumbnail:
-            "https://d32dm0rphc51dk.cloudfront.net/sRcWwNuubf6I6XKZeAVLuA/medium.jpg",
-        },
-      ],
-      otherWorkFromArtist: [{}, {}],
-      similarArtists: [{}, {}],
     };
   },
 };
