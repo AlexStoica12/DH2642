@@ -18,7 +18,7 @@
             <h1 class="my-5 mb-16">Sign In</h1>
             <!-- Username Text Field -->
             <v-text-field
-              v-model="username"
+              v-model="email"
               solo
               label="Username..."
               clearable
@@ -33,9 +33,11 @@
               class="my-3"
             ></v-text-field>
             <!-- Sign In -->
-            <v-btn id="btn" class="my-3"> Sign In </v-btn>
+            <v-btn id="btn" class="my-3" @click="signin"> Sign In </v-btn>
             <!-- Already have an account -->
             <p class="grey--text text--darken-3">Already have an account?</p>
+            <v-btn @click="addToDatabase">Add</v-btn>
+            <v-btn @click="getDatabase">get</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -48,9 +50,25 @@ export default {
   name: "Signin",
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
     };
+  },
+  methods: {
+    signin() {
+      this.$store
+        .dispatch("signInAction", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(() => this.$store.dispatch("loadUserData"));
+    },
+    addToDatabase() {
+      this.$store.dispatch("saveUserData");
+    },
+    getDatabase() {
+      this.$store.dispatch("loadUserData");
+    },
   },
 };
 </script>
