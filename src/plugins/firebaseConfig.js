@@ -1,4 +1,5 @@
 import firebase from "firebase/compat/app";
+import "firebase/compat/database";
 
 // Import needed firebase modules
 import "firebase/compat/auth";
@@ -12,6 +13,10 @@ const firebaseConfig = {
   messagingSenderId: "742190588231",
   appId: "1:742190588231:web:49f243ddee6982b088ac62",
   measurementId: "${config.measurementId}",
+  databaseURL:
+    "https://dh2632-project-default-rtdb.europe-west1.firebasedatabase.app/",
 };
 
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
+
+export default app;

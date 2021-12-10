@@ -36,6 +36,7 @@
             <v-btn id="btn" class="my-3" @click="signup"> Sign In </v-btn>
             <!-- Already have an account -->
             <p class="grey--text text--darken-3">Already have an account?</p>
+            <v-btn @click="addToDatabase">Add</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-// import firebase from "firebase/compat/app";
+import firebase from "../plugins/firebaseConfig.js";
 
 export default {
   name: "Signin",
@@ -57,6 +58,13 @@ export default {
   methods: {
     signup() {
       this.$store.dispatch("signInAction", {
+        email: this.email,
+        password: this.password,
+      });
+    },
+    addToDatabase() {
+      const db = firebase.database();
+      db.ref("artsyModel/" + this.$store.getters.getUser._delegate.uid).set({
         email: this.email,
         password: this.password,
       });
