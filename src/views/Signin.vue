@@ -33,7 +33,7 @@
               class="my-3"
             ></v-text-field>
             <!-- Sign In -->
-            <v-btn id="btn" class="my-3"> Sign In </v-btn>
+            <v-btn id="btn" class="my-3" @click="signup"> Sign In </v-btn>
             <!-- Already have an account -->
             <p class="grey--text text--darken-3">Already have an account?</p>
           </v-col>
@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import firebase from "firebase/compat/app";
+
 export default {
   name: "Signin",
   data() {
@@ -51,6 +53,19 @@ export default {
       username: "",
       password: "",
     };
+  },
+  methods: {
+    signup() {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((response) => {
+          console.log("Success! ", response);
+        })
+        .catch((error) => {
+          console.log("Failed!", error);
+        });
+    },
   },
 };
 </script>
