@@ -36,7 +36,7 @@
       </v-toolbar-items>
 
       <!-- Logic for the drawer (only visible on xs screens) -->
-      <v-btn icon class="hidden-sm-and-up" @click="dialog = !dialog">
+      <v-btn icon class="hidden-sm-and-up mr-3" @click="dialog = !dialog">
         <v-icon>mdi-account</v-icon>
       </v-btn>
       <v-app-bar-nav-icon
@@ -65,7 +65,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <SignIn v-bind:mode="mode" v-bind:dialog="dialog" />
+    <SignIn v-bind:dialog.sync="dialog" />
   </nav>
 </template>
 
@@ -85,19 +85,13 @@ export default {
       ],
     };
   },
-  computed: {
-    mode: function () {
-      if (this.$store.getters.isUserLoggedIn === null) {
-        return "sign-up";
-      } else {
-        return "sign-in";
-      }
-    },
-  },
   methods: {
     // Helper function for navigation
     navigateTo: function (route) {
       this.$router.push(route);
+    },
+    changeDialog: function (val) {
+      this.dialog = val;
     },
   },
 };

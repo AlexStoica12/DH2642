@@ -45,19 +45,36 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text @click="dialog = false"> Continue As Guest </v-btn>
-          <v-btn v-if="mode === 'sign-in'" text @click="dialog = false">
+          <v-btn text v-on:click="closeDialog(false)">
+            Continue As Guest
+          </v-btn>
+          <v-btn
+            v-if="mode === 'sign-in'"
+            text
+            @click="
+              closeDialog(false);
+              signin();
+            "
+          >
             Login
           </v-btn>
-          <v-btn v-if="mode === 'sign-up'" text @click="dialog = false">
+          <v-btn
+            v-if="mode === 'sign-up'"
+            text
+            @click="
+              closeDialog(false);
+
+              signup();
+            "
+          >
             Sign Up
           </v-btn>
         </v-card-actions>
         <v-col class="d-flex align-end flex-column">
-          <v-btn v-if="mode === 'sign-up'" text @click="dialog = false"
+          <v-btn v-if="mode === 'sign-up'" text @click="mode = 'sign-in'"
             >Already have an account?</v-btn
           >
-          <v-btn v-if="mode === 'sign-in'" text @click="dialog = false"
+          <v-btn v-if="mode === 'sign-in'" text @click="mode = 'sign-up'"
             >Don't have an account?</v-btn
           >
         </v-col>
@@ -68,13 +85,14 @@
 <script>
 export default {
   name: "Signin",
-  props: ["mode", "dialog"],
+  props: ["dialog"],
   data() {
     return {
       firstName: "",
       lastName: "",
       email: "",
       password: "",
+      mode: "sign-in",
     };
   },
   computed: {},
@@ -87,11 +105,14 @@ export default {
         })
         .then(() => this.$store.dispatch("loadUserData"));
     },
-    addToDatabase() {
-      this.$store.dispatch("saveUserData");
+    signup() {
+      this.$store.dispatch("signUpAction", {
+        email: this.email,
+        password: this.password,
+      });
     },
-    getDatabase() {
-      this.$store.dispatch("loadUserData");
+    closeDialog: function () {
+      this.$emit("update:dialog", false);
     },
   },
 };
