@@ -32,7 +32,7 @@
               contain
               class="pa-10"
               max-height="55vh"
-              :src="currentArtworkDetails._links.thumbnail.href"
+              :src="getLinkImage(currentArtworkDetails)"
               position="center center"
             ></v-img>
           </v-sheet>
@@ -116,7 +116,7 @@
                   <v-img
                     class="white--text align-end"
                     height="200px"
-                    :src="artwork._links.thumbnail.href"
+                    :src="getLinkImage(artwork)"
                   >
                   </v-img>
                   <v-card-text class="pb-0">
@@ -156,8 +156,8 @@
               >
                 <v-card
                   v-if="
-                    artwork._links.thumbnail.href !==
-                    currentArtworkDetails._links.thumbnail.href
+                    getLinkImage(artwork) !==
+                    getLinkImage(currentArtworkDetails)
                   "
                   class="ma-2 mb-5 d-flex flex-column"
                   height="325"
@@ -168,7 +168,7 @@
                   <v-img
                     class="white--text align-end"
                     height="200px"
-                    :src="artwork._links.thumbnail.href"
+                    :src="getLinkImage(artwork)"
                   >
                   </v-img>
                   <v-card-text class="pb-0">
@@ -219,6 +219,13 @@ export default {
     },
   },
   methods: {
+    getLinkImage: function (artwork) {
+      if (artwork._links.thumbnail) {
+        return artwork._links.thumbnail.href;
+      } else {
+        return "https://demechanica.com/wp-content/uploads/2018/07/placeholder.png";
+      }
+    },
     addArtworkToGallery: function (artwork) {
       this.currentArtworkAdded = artwork;
       this.$store.dispatch("addToFavorited", artwork);
