@@ -137,13 +137,19 @@ export default new Vuex.Store({
           commit("setError", error.message);
         });
     },
-    loadUserData({ commit }) {
-      // Insert Code
-      // this.model.favoritedArtworks = {firebase funky business}
+    loadUserData({ commit, state, dispatch }) {
+      const db = firebase.database();
+      db.ref("artsyModel/" + state.user._delegate.uid)
+        .once("value")
+        .then(function (snapshot) {
+          dispatch("setFavoritedArtworks", snapshot.val().favoritedArtworks);
+        });
     },
-    saveUserData({ commit }) {
-      // Insert Code
-      // {firebase funky business} = this.model.favoritedArtworks
+    saveUserData({ commit, state }) {
+      const db = firebase.database();
+      db.ref("artsyModel/" + state.user._delegate.uid).set({
+        favoritedArtworks: state.model.favoritedArtworks,
+      });
     },
   },
   getters: {

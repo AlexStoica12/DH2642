@@ -46,8 +46,6 @@
 </template>
 
 <script>
-import firebase from "../plugins/firebaseConfig.js";
-
 export default {
   name: "Signin",
   data() {
@@ -62,22 +60,12 @@ export default {
         email: this.email,
         password: this.password,
       });
-      // .then(this.$store.dispatch("loadUserData"));
     },
     addToDatabase() {
-      const db = firebase.database();
-      db.ref("artsyModel/" + this.$store.getters.getUser._delegate.uid).set({
-        favoritedArtworks: this.$store.getters.myModel.favoritedArtworks,
-      });
+      this.$store.dispatch("saveUserData");
     },
     getDatabase() {
-      const db = firebase.database();
-      db.ref("artsyModel/" + this.$store.getters.getUser._delegate.uid)
-        .once("value")
-        .then(function (snapshot) {
-          // this.$store.dispatch("setFavoritedArtworks", snapshot.val());
-          console.log(snapshot.val());
-        });
+      this.$store.dispatch("loadUserData");
     },
   },
 };
