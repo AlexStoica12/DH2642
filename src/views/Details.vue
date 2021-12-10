@@ -15,11 +15,10 @@
     </v-main>
     <v-container v-else>
       <v-row>
-        <v-col align-self="start">
-          <v-btn class="ma-1" @click="navigateBack()"
-            >back to search results.</v-btn
-          >
-        </v-col>
+        <v-btn tile @click="navigateBack()">
+          <v-icon left>mdi-keyboard-backspace</v-icon>
+          Go back
+        </v-btn>
       </v-row>
       <v-row class="mt-0">
         <v-col cols="8">
@@ -187,7 +186,7 @@ export default {
     },
     // Helper function for navigation
     navigateBack: function () {
-      this.$router.push("/home");
+      this.$router.go(-1);
     },
     isLoading: function () {
       let status = this.$store.getters.status;
