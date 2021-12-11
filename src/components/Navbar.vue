@@ -1,8 +1,8 @@
 <template>
   <nav>
-    <v-app-bar app class="rounded-xl mx-5 white">
+    <v-app-bar app class="rounded-xl mx-5 my-2 white">
       <!-- Logo -->
-      <v-toolbar-title class="text-uppercase">
+      <v-toolbar-title class="text-uppercase" @click="navigateTo('/home')">
         <span class="font-weight-light">Art</span>
         <span>Point</span>
       </v-toolbar-title>
