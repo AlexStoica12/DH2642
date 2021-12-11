@@ -11,7 +11,7 @@ export default new Vuex.Store({
   state: {
     // Api Request Status
     status: "",
-    token: localStorage.getItem("token") | "",
+    token: null,
     model: new ArtsyModel(),
     // Firebase
     user: null,
@@ -53,8 +53,17 @@ export default new Vuex.Store({
     setFavoritedArtworks(state, artwork) {
       state.model.setFavoritedArtworks(artwork);
     },
-    setCurrentArtwork(state, { id, artworkDetails, similarArtworks, artists, artworksArtist}) {
-      state.model.setCurrentArtworkSync(id, artworkDetails, similarArtworks, artists, artworksArtist);
+    setCurrentArtwork(
+      state,
+      { id, artworkDetails, similarArtworks, artists, artworksArtist }
+    ) {
+      state.model.setCurrentArtworkSync(
+        id,
+        artworkDetails,
+        similarArtworks,
+        artists,
+        artworksArtist
+      );
     },
     // Firebase
     setUser(state, payload) {
@@ -111,13 +120,24 @@ export default new Vuex.Store({
           similar_to_artwork_id: id,
           size: 10,
         });
-        const artists = await artsySource.searchArtistParams({artwork_id: artwork.id})
+        const artists = await artsySource.searchArtistParams({
+          artwork_id: artwork.id,
+        });
         const similarArtworks = artworks._embedded.artworks;
-        const artistID = artists._embedded.artists[0].id
-        const artworksArtistResult = await artsySource.searchArtworksParams({artist_id: artistID, size: 10})
-        const artworksArtist = artworksArtistResult._embedded.artworks
+        const artistID = artists._embedded.artists[0].id;
+        const artworksArtistResult = await artsySource.searchArtworksParams({
+          artist_id: artistID,
+          size: 10,
+        });
+        const artworksArtist = artworksArtistResult._embedded.artworks;
 
-        commit("setCurrentArtwork", { id, artworkDetails, similarArtworks, artists, artworksArtist});
+        commit("setCurrentArtwork", {
+          id,
+          artworkDetails,
+          similarArtworks,
+          artists,
+          artworksArtist,
+        });
       } catch (error) {
         commit("error");
       } finally {

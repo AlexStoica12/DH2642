@@ -82,12 +82,15 @@ import artsySource from "@/js/artsySource";
 export default {
   name: "Home",
   mounted() {
-    this.searchArtworks();
+    if (this.token !== null) {
+      this.searchArtworks();
+    }
   },
   data() {
     return {
       artworks: [],
       isLoading: true,
+      searchString: "",
       socials: [
         {
           icon: "mdi-facebook",
@@ -100,21 +103,21 @@ export default {
       ],
     };
   },
+  computed: {
+    token: function () {
+      return this.$store.getters.currentToken;
+    },
+  },
+  watch: {
+    token() {
+      this.searchArtworks();
+    },
+  },
   methods: {
     async searchArtworks() {
-      if (this.$store.getters.currentToken === null) {
-        let sleep = (milliseconds) => {
-          return new Promise((resolve) => setTimeout(resolve, milliseconds));
-        };
-        sleep(100);
-        let artworks = await artsySource.searchAllArtworks();
-        this.artworks = artworks._embedded.artworks;
-        this.isLoading = false;
-      } else {
-        let artworks = await artsySource.searchAllArtworks();
-        this.artworks = artworks._embedded.artworks;
-        this.isLoading = false;
-      }
+      let artworks = await artsySource.searchAllArtworks();
+      this.artworks = artworks._embedded.artworks;
+      this.isLoading = false;
     },
     // Helper function for navigation
     navigateTo: function (artwork) {
