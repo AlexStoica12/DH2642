@@ -24,7 +24,7 @@
       <!-- On Right Side, Profile Tab -->
       <v-spacer></v-spacer>
       <v-divider class="mx-4" vertical></v-divider>
-      <v-toolbar-items>
+      <v-toolbar-items v-if="!isUserLoggedIn">
         <v-btn
           plain
           @click="dialog = !dialog"
@@ -35,10 +35,17 @@
         </v-btn>
       </v-toolbar-items>
 
-      <!-- Logic for the drawer (only visible on xs screens) -->
-      <v-btn icon class="hidden-sm-and-up mr-3" @click="dialog = !dialog">
+      <!-- Account Login vs Logout  -->
+      <v-btn v-if="isUserLoggedIn" plain @click="signOut()"> Logout </v-btn>
+      <v-btn
+        v-else
+        icon
+        class="hidden-sm-and-up mr-3"
+        @click="dialog = !dialog"
+      >
         <v-icon>mdi-account</v-icon>
       </v-btn>
+      <!-- Drawer (only visible on xs screens) -->
       <v-app-bar-nav-icon
         class="grey--text hidden-sm-and-up"
         @click="drawer = !drawer"
@@ -74,6 +81,11 @@ import SignIn from "../components/Signin.vue";
 export default {
   name: "Navbar",
   components: { SignIn },
+  computed: {
+    isUserLoggedIn: function () {
+      return this.$store.getters.isUserLoggedIn;
+    },
+  },
   data() {
     return {
       drawer: false,
@@ -92,6 +104,9 @@ export default {
     },
     changeDialog: function (val) {
       this.dialog = val;
+    },
+    signOut: function () {
+      this.$store.dispatch("signOutAction");
     },
   },
 };
