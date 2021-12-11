@@ -1,8 +1,8 @@
 <template>
   <nav>
-    <v-app-bar app class="rounded-xl mx-5 white">
+    <v-app-bar app class="rounded-xl mx-5 my-2 white">
       <!-- Logo -->
-      <v-toolbar-title class="text-uppercase">
+      <v-toolbar-title class="text-uppercase" @click="navigateTo('/home')">
         <span class="font-weight-light">Art</span>
         <span>Point</span>
       </v-toolbar-title>
@@ -24,10 +24,10 @@
       <!-- On Right Side, Profile Tab -->
       <v-spacer></v-spacer>
       <v-divider class="mx-4" vertical></v-divider>
-      <v-toolbar-items>
+      <v-toolbar-items v-if="!isUserLoggedIn">
         <v-btn
           plain
-          @click="navigateTo('/')"
+          @click="dialog = !dialog"
           class="white hidden-xs-only"
           style="width: 100px"
         >
@@ -35,11 +35,22 @@
         </v-btn>
       </v-toolbar-items>
 
-      <!-- Logic for the drawer (only visible on xs screens) -->
+      <!-- Account Login vs Logout  -->
+      <v-btn v-if="isUserLoggedIn" plain @click="signOut()"> Logout </v-btn>
+      <v-btn
+        v-else
+        icon
+        class="hidden-sm-and-up mr-3"
+        @click="dialog = !dialog"
+      >
+        <v-icon>mdi-account</v-icon>
+      </v-btn>
+      <!-- Drawer (only visible on xs screens) -->
       <v-app-bar-nav-icon
         class="grey--text hidden-sm-and-up"
         @click="drawer = !drawer"
-      ></v-app-bar-nav-icon>
+      >
+      </v-app-bar-nav-icon>
     </v-app-bar>
 
     <!-- Navigation Drawer for Small Small Screens -->
@@ -58,26 +69,27 @@
             </v-list-item-icon>
             <v-list-item-title>{{ link.text }}</v-list-item-title>
           </v-list-item>
-
-          <!-- Profile Tab -->
-          <v-list-item @click="navigateTo('/')">
-            <v-list-item-icon>
-              <v-icon></v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Profile</v-list-item-title>
-          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+    <SignIn v-bind:dialog.sync="dialog" />
   </nav>
 </template>
 
 <script>
+import SignIn from "../components/Signin.vue";
 export default {
   name: "Navbar",
+  components: { SignIn },
+  computed: {
+    isUserLoggedIn: function () {
+      return this.$store.getters.isUserLoggedIn;
+    },
+  },
   data() {
     return {
       drawer: false,
+      dialog: false,
       links: [
         { icon: "mdi-home", text: "Explore", route: "/home" },
         { icon: "mdi-home", text: "My Gallery", route: "/profile" },
@@ -89,6 +101,12 @@ export default {
     // Helper function for navigation
     navigateTo: function (route) {
       this.$router.push(route);
+    },
+    changeDialog: function (val) {
+      this.dialog = val;
+    },
+    signOut: function () {
+      this.$store.dispatch("signOutAction");
     },
   },
 };

@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Signin from "../views/Signin.vue";
 import Profile from "../views/Profile.vue";
 import Details from "../views/Details.vue";
 import Test from "../views/Test.vue";
@@ -9,11 +8,6 @@ import Test from "../views/Test.vue";
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    name: "Signin",
-    component: Signin,
-  },
   {
     path: "/home",
     name: "Home",
@@ -33,6 +27,10 @@ const routes = [
     path: "/test",
     name: "Test",
     component: Test,
+  },
+  {
+    path: "*",
+    redirect: "/home",
   },
 ];
 

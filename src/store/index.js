@@ -148,6 +148,18 @@ export default new Vuex.Store({
           commit("error");
         });
     },
+    signOutAction({ commit }) {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          commit("setUser", null);
+          commit("setFavoritedArtworks", []);
+        })
+        .catch((error) => {
+          commit("error");
+        });
+    },
     async loadUserData({ commit, state }) {
       if (state.user !== null) {
         commit("request");
@@ -178,6 +190,7 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: (state) => !!state.token,
+    isUserLoggedIn: (state) => !!state.user,
     status: (state) => state.status,
     currentToken: (state) => state.token,
     myModel: (state) => state.model,
