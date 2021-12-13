@@ -46,7 +46,7 @@ const artsySource = {
       });
   },
   searchAllArtworks() {
-    return artsySource.apiCall("artworks?size=100").then((data) => {
+    return artsySource.apiCall("artworks?size=50").then((data) => {
       return data;
     });
   },

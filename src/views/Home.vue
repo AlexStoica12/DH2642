@@ -1,8 +1,8 @@
 /* eslint-disable */
 <template>
   <v-card flat tile>
-    <v-toolbar span>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+    <v-toolbar span class="rounded-xl mx-5 my-2 white">
+
       <v-text-field
         hide-details
         label="Type art name"
@@ -13,22 +13,15 @@
         dense
         single-line
         append-icon="mdi-magnify"
-        class="shrink mx-4"
       >
       </v-text-field>
-      <v-btn icon>
-        <v-icon></v-icon>
-      </v-btn>
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
     </v-toolbar>
     <v-container v-if="isLoading">
       <div class="text-center">
         <v-progress-circular
           indeterminate
           color="primary"
+          :size="50"
         ></v-progress-circular>
       </div>
     </v-container>
