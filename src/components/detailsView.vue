@@ -37,7 +37,7 @@
           </v-sheet>
         </v-col>
         <v-col cols="12" md="4" class="pl-0">
-          <v-sheet color="white" min-height="70vh" rounded="lg">
+          <v-sheet color="white" min-height="30vh" rounded="lg">
             <div
               :class="{
                 'pt-0': $vuetify.breakpoint.smAndDown,
