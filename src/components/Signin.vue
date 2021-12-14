@@ -121,7 +121,16 @@ export default {
       }
     },
     closeDialog: function () {
+      this.clearForm();
       this.$emit("update:dialog", false);
+    },
+    clearForm: function () {
+      this.firstName = "";
+      this.lastName = "";
+      this.email = "";
+      this.password = "";
+      this.$refs.emailForm.resetValidation();
+      this.$refs.passwordForm.resetValidation();
     },
   },
 };
