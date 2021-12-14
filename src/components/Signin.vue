@@ -12,31 +12,35 @@
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
                   label="First name*"
-                  required
                   v-model="firstName"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
                   label="Last name*"
-                  required
                   v-model="lastName"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Email*"
-                  required
-                  v-model="email"
-                ></v-text-field>
+                <v-form ref="emailForm">
+                  <v-text-field
+                    label="Email*"
+                    required
+                    v-model="email"
+                    :rules="[rules.empty, rules.email]"
+                  ></v-text-field>
+                </v-form>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  label="Password*"
-                  type="password"
-                  required
-                  v-model="password"
-                ></v-text-field>
+                <v-form ref="passwordForm">
+                  <v-text-field
+                    label="Password*"
+                    required
+                    v-model="password"
+                    type="password"
+                    :rules="[rules.empty, rules.password]"
+                  ></v-text-field>
+                </v-form>
               </v-col>
             </v-row>
           </v-container>
@@ -48,25 +52,10 @@
           <v-btn text v-on:click="closeDialog(false)">
             Continue As Guest
           </v-btn>
-          <v-btn
-            v-if="mode === 'sign-in'"
-            text
-            @click="
-              closeDialog(false);
-              signin();
-            "
-          >
+          <v-btn v-if="mode === 'sign-in'" text @click="signin()">
             Login
           </v-btn>
-          <v-btn
-            v-if="mode === 'sign-up'"
-            text
-            @click="
-              closeDialog(false);
-
-              signup();
-            "
-          >
+          <v-btn v-if="mode === 'sign-up'" text @click="signup()">
             Sign Up
           </v-btn>
         </v-card-actions>
@@ -93,23 +82,43 @@ export default {
       email: "",
       password: "",
       mode: "sign-in",
+      rules: {
+        empty: (v) => !!v || "Required.",
+        email: (v) =>
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          "E-mail must be valid",
+        password: (v) => v.length >= 6 || "Minimum length is 6 letters",
+      },
     };
   },
-  computed: {},
+  computed: {
+    isValidated: function () {
+      const emailFormValid = this.$refs.emailForm.validate();
+      const passwordFormValid = this.$refs.passwordForm.validate();
+      return emailFormValid && passwordFormValid;
+    },
+  },
   methods: {
     signin() {
-      this.$store
-        .dispatch("signInAction", {
-          email: this.email,
-          password: this.password,
-        })
-        .then(() => this.$store.dispatch("loadUserData"));
+      if (this.isValidated) {
+        this.$store
+          .dispatch("signInAction", {
+            email: this.email,
+            password: this.password,
+          })
+          .then(() => this.$store.dispatch("loadUserData"))
+          .then(this.closeDialog(false));
+      }
     },
     signup() {
-      this.$store.dispatch("signUpAction", {
-        email: this.email,
-        password: this.password,
-      });
+      if (this.isValidated) {
+        this.$store
+          .dispatch("signUpAction", {
+            email: this.email,
+            password: this.password,
+          })
+          .then(this.closeDialog(false));
+      }
     },
     closeDialog: function () {
       this.$emit("update:dialog", false);
