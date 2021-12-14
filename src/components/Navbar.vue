@@ -46,8 +46,15 @@
         </v-btn>
       </v-toolbar-items>
 
-      <!-- Account Login vs Logout  -->
-      <v-btn v-if="isUserLoggedIn" plain @click="signOut()"> Logout </v-btn>
+      <!-- Account Logout Large Screens Only -->
+      <v-btn
+        v-if="isUserLoggedIn"
+        plain
+        @click="signOut()"
+        class="hidden-xs-only mr-3"
+      >
+        Logout
+      </v-btn>
       <!-- Drawer (only visible on xs screens) -->
       <v-app-bar-nav-icon
         class="grey--text hidden-sm-and-up"
@@ -71,20 +78,33 @@
               <v-icon></v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{ link.text }}</v-list-item-title>
-            <!-- Sign in -->
           </v-list-item>
-          <v-list-item @click="signinDialog = !signinDialog">
+          <!-- Sign in -->
+          <v-list-item
+            v-if="!isUserLoggedIn"
+            @click="signinDialog = !signinDialog"
+          >
             <v-list-item-icon>
               <v-icon></v-icon>
             </v-list-item-icon>
             <v-list-item-title>Sign in</v-list-item-title>
           </v-list-item>
           <!-- Sign Up -->
-          <v-list-item @click="signupDialog = !signupDialog">
+          <v-list-item
+            v-if="!isUserLoggedIn"
+            @click="signupDialog = !signupDialog"
+          >
             <v-list-item-icon>
               <v-icon></v-icon>
             </v-list-item-icon>
             <v-list-item-title>Sign Up</v-list-item-title>
+          </v-list-item>
+          <!-- Logout -->
+          <v-list-item v-if="isUserLoggedIn" @click="signOut()">
+            <v-list-item-icon>
+              <v-icon></v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Logout</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -123,6 +143,7 @@ export default {
     },
     signOut: function () {
       this.$store.dispatch("signOutAction");
+      this.drawer = false;
     },
   },
 };
