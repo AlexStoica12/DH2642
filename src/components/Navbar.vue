@@ -48,22 +48,6 @@
 
       <!-- Account Login vs Logout  -->
       <v-btn v-if="isUserLoggedIn" plain @click="signOut()"> Logout </v-btn>
-      <v-btn
-        v-if="!isUserLoggedIn"
-        plain
-        class="hidden-sm-and-up ma-0 mr-1 pa-0"
-        @click="signinDialog = !signinDialog"
-      >
-        Sign In
-      </v-btn>
-      <v-btn
-        v-if="!isUserLoggedIn"
-        plain
-        class="hidden-sm-and-up ma-0 pa-0"
-        @click="signupDialog = !signupDialog"
-      >
-        Sign Up
-      </v-btn>
       <!-- Drawer (only visible on xs screens) -->
       <v-app-bar-nav-icon
         class="grey--text hidden-sm-and-up"
@@ -87,6 +71,20 @@
               <v-icon></v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{ link.text }}</v-list-item-title>
+            <!-- Sign in -->
+          </v-list-item>
+          <v-list-item @click="signinDialog = !signinDialog">
+            <v-list-item-icon>
+              <v-icon></v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Sign in</v-list-item-title>
+          </v-list-item>
+          <!-- Sign Up -->
+          <v-list-item @click="signupDialog = !signupDialog">
+            <v-list-item-icon>
+              <v-icon></v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Sign Up</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
