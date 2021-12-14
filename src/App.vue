@@ -2,7 +2,16 @@
   <v-app>
     <Navbar />
     <v-main>
-      <v-container fluid>
+      <v-alert
+        v-if="$store.getters.getError"
+        outlined
+        type="warning"
+        prominent
+        border="left"
+      >
+        App does not work.
+      </v-alert>
+      <v-container v-else fluid>
         <router-view />
       </v-container>
     </v-main>

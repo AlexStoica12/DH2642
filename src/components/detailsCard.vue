@@ -4,14 +4,18 @@
     height="325"
     width="300"
     hover
-    @click="navigateTo()"
+    @click="navigateTo(artwork)"
   >
-    <v-img class="white--text align-end" height="200px" :src="imageURL">
+    <v-img
+      class="white--text align-end"
+      height="200px"
+      :src="getLinkImage(artwork)"
+    >
     </v-img>
     <v-card-text class="pb-0">
       <div style="width: 200px">
         <p class="overflow-x-auto font-weight-medium">
-          {{ artworkTitle }}
+          {{ artwork.title }}
         </p>
       </div>
     </v-card-text>
@@ -21,8 +25,8 @@
         color="orange"
         text
         @click.stop="
-          activateSnackbarAddToGallery();
-          addArtworkToGallery();
+          activateSnackbarAddToGalleryEventFn();
+          addArtworkToGallery(artwork);
         "
       >
         Add to My Gallery
@@ -34,24 +38,14 @@
 <script>
 export default {
   name: "DetailsCard",
-  props: ["imageURL", "artworkTitle"],
-  emits: [
-    "addArtworkToGalleryEvent",
-    "navigateToEvent",
-    "activateSnackbarAddToGalleryEvent",
-  ],
+  props: ["artwork"],
+  inject: ["addArtworkToGallery", "navigateTo", "getLinkImage"],
   data: function () {
     return {};
   },
   methods: {
-    addArtworkToGallery: function () {
-      this.$emit("addArtworkToGalleryEvent");
-    },
-    navigateTo: function () {
-      this.$emit("navigateToEvent");
-    },
-    activateSnackbarAddToGallery: function () {
-      this.$emit("activateSnackbarAddToGalleryEvent");
+    activateSnackbarAddToGalleryEventFn: function () {
+      this.$root.$emit("activateSnackbarAddToGalleryEvent");
     },
   },
 };
