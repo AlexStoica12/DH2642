@@ -1,9 +1,9 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="signinDialog" persistent max-width="600px">
+    <v-dialog v-model="signupDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <h1 class="text-h5">Sign In</h1>
+          <h1 class="text-h5">Sign Up</h1>
           <v-spacer></v-spacer>
           <v-btn large icon v-on:click="closeDialog(false)">
             <v-icon>mdi-close</v-icon>
@@ -52,7 +52,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="ma-3" text @click="signin()"> Sign in </v-btn>
+
+          <v-btn class="ma-3" text @click="signup()"> Sign Up </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -60,15 +61,14 @@
 </template>
 <script>
 export default {
-  name: "Signin",
-  props: ["signinDialog"],
+  name: "Signup",
+  props: ["signupDialog"],
   data() {
     return {
       firstName: "",
       lastName: "",
       email: "",
       password: "",
-      mode: "sign-in",
       rules: {
         empty: (v) => !!v || "Required.",
         email: (v) =>
@@ -86,20 +86,19 @@ export default {
     },
   },
   methods: {
-    signin() {
+    signup() {
       if (this.isValidated) {
         this.$store
-          .dispatch("signInAction", {
+          .dispatch("signUpAction", {
             email: this.email,
             password: this.password,
           })
-          .then(() => this.$store.dispatch("loadUserData"))
           .then(this.closeDialog(false));
       }
     },
     closeDialog: function () {
       this.clearForm();
-      this.$emit("update:signinDialog", false);
+      this.$emit("update:signupDialog", false);
     },
     clearForm: function () {
       this.firstName = "";

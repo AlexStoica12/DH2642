@@ -21,29 +21,48 @@
         </v-btn>
       </v-toolbar-items>
 
-      <!-- On Right Side, Profile Tab -->
+      <!-- On Right Side, Sign In and Sign Up Button -->
       <v-spacer></v-spacer>
       <v-divider class="mx-4" vertical></v-divider>
       <v-toolbar-items v-if="!isUserLoggedIn">
         <v-btn
           plain
-          @click="dialog = !dialog"
+          @click="signinDialog = !signinDialog"
           class="white hidden-xs-only"
           style="width: 100px"
         >
-          <v-icon>mdi-account</v-icon>
+          Sign In
+        </v-btn>
+      </v-toolbar-items>
+
+      <v-toolbar-items v-if="!isUserLoggedIn">
+        <v-btn
+          plain
+          @click="signupDialog = !signupDialog"
+          class="white hidden-xs-only"
+          style="width: 100px"
+        >
+          Sign Up
         </v-btn>
       </v-toolbar-items>
 
       <!-- Account Login vs Logout  -->
       <v-btn v-if="isUserLoggedIn" plain @click="signOut()"> Logout </v-btn>
       <v-btn
-        v-else
-        icon
-        class="hidden-sm-and-up mr-3"
-        @click="dialog = !dialog"
+        v-if="!isUserLoggedIn"
+        plain
+        class="hidden-sm-and-up ma-0 mr-1 pa-0"
+        @click="signinDialog = !signinDialog"
       >
-        <v-icon>mdi-account</v-icon>
+        Sign In
+      </v-btn>
+      <v-btn
+        v-if="!isUserLoggedIn"
+        plain
+        class="hidden-sm-and-up ma-0 pa-0"
+        @click="signupDialog = !signupDialog"
+      >
+        Sign Up
       </v-btn>
       <!-- Drawer (only visible on xs screens) -->
       <v-app-bar-nav-icon
@@ -72,15 +91,17 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <SignIn v-bind:dialog.sync="dialog" />
+    <SignIn v-bind:signinDialog.sync="signinDialog" />
+    <Signup v-bind:signupDialog.sync="signupDialog" />
   </nav>
 </template>
 
 <script>
 import SignIn from "../components/Signin.vue";
+import Signup from "../components/Signup.vue";
 export default {
   name: "Navbar",
-  components: { SignIn },
+  components: { SignIn, Signup },
   computed: {
     isUserLoggedIn: function () {
       return this.$store.getters.isUserLoggedIn;
@@ -89,11 +110,11 @@ export default {
   data() {
     return {
       drawer: false,
-      dialog: false,
+      signinDialog: false,
+      signupDialog: false,
       links: [
         { icon: "mdi-home", text: "Explore", route: "/home" },
         { icon: "mdi-home", text: "My Gallery", route: "/profile" },
-        // { icon: "mdi-account", text: "Sign In", route: "/signin" },
       ],
     };
   },
@@ -101,9 +122,6 @@ export default {
     // Helper function for navigation
     navigateTo: function (route) {
       this.$router.push(route);
-    },
-    changeDialog: function (val) {
-      this.dialog = val;
     },
     signOut: function () {
       this.$store.dispatch("signOutAction");
