@@ -19,6 +19,9 @@ auth.onAuthStateChanged((user) => {
           }
         );
         store.dispatch("setWatch", watch);
+      })
+      .catch((err) => {
+        throw new Error(err);
       });
   } else {
     if (store.getters.getUser !== null) {
