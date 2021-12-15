@@ -90,6 +90,7 @@ export default {
   methods: {
     signup() {
       if (this.isValidated) {
+        // Sign Up to Firebase
         firebaseModel
           .signUpAction({
             email: this.email,
@@ -97,6 +98,18 @@ export default {
           })
           .then((user) => {
             this.$store.dispatch("setUser", user);
+          }) // Watch if User makes changes to favoritedArtworks, persist the data
+          .then(() => {
+            const watch = this.$store.watch(
+              (state, getters) => getters.favoritedArtworks,
+              (newValue) => {
+                firebaseModel.saveUserData(
+                  this.$store.getters.getUser,
+                  newValue
+                );
+              }
+            );
+            this.$store.dispatch("setWatch", watch);
           })
           .then(this.closeDialog(false));
       }

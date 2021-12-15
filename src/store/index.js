@@ -114,6 +114,7 @@ export default new Vuex.Store({
       commit("signOut");
       state.watch();
       dispatch("setWatch", null);
+      commit("setFavoritedArtworks", []);
     },
     async setCurrentArtwork({ commit }, id) {
       commit("request");
