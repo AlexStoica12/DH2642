@@ -115,6 +115,7 @@
 </template>
 
 <script>
+import firebaseModel from "../js/firebaseModel.js";
 import SignIn from "../components/Signin.vue";
 import Signup from "../components/Signup.vue";
 export default {
@@ -142,8 +143,10 @@ export default {
       this.$router.push(route);
     },
     signOut: function () {
-      this.$store.dispatch("signOutAction");
-      this.drawer = false;
+      firebaseModel.signOutAction().then(() => {
+        this.$store.dispatch("signOut");
+        this.drawer = false;
+      });
     },
   },
 };

@@ -2,8 +2,6 @@ import Vue from "vue";
 import Vuex from "vuex";
 import ArtsyModel from "../js/artsyModel.js";
 import artsySource from "../js/artsySource.js";
-import firebase from "firebase/compat/app";
-import firebaseModel from "../js/firebaseModel.js";
 /* eslint-disable */
 Vue.use(Vuex);
 
@@ -16,6 +14,8 @@ export default new Vuex.Store({
     // Firebase
     user: null,
     error: null,
+    // If persisting data, watch changes
+    watch: null,
   },
   mutations: {
     // Api Requests
@@ -69,8 +69,15 @@ export default new Vuex.Store({
     setUser(state, payload) {
       state.user = payload;
     },
+    signOut(state) {
+      state.user = null;
+    },
     setError(state, payload) {
       state.error = payload;
+    },
+    // Watcher
+    setWatch(state, payload) {
+      state.watch = payload;
     },
   },
   actions: {
@@ -93,14 +100,21 @@ export default new Vuex.Store({
     // Model
     addToFavorited({ commit, dispatch }, artwork) {
       commit("addToFavorited", artwork);
-      dispatch("saveUserData");
     },
     removeFromFavorited({ commit, dispatch }, artwork) {
       commit("removeFromFavorited", artwork);
-      dispatch("saveUserData");
     },
     setFavoritedArtworks({ commit }, artworks) {
       commit("setFavoritedArtworks", artworks);
+    },
+    setUser({ commit }, user) {
+      commit("setUser", user.user._delegate.uid);
+    },
+    signOut({ commit, state, dispatch }) {
+      commit("signOut");
+      state.watch();
+      dispatch("setWatch", null);
+      commit("setFavoritedArtworks", []);
     },
     async setCurrentArtwork({ commit }, id) {
       commit("request");
@@ -144,68 +158,9 @@ export default new Vuex.Store({
         commit("complete");
       }
     },
-    // Firebase
-    signUpAction({ commit }, payload) {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(payload.email, payload.password)
-        .then((response) => {
-          commit("setUser", response.user);
-        })
-        .catch((error) => {
-          commit("setError", error.message);
-        });
-    },
-    signInAction({ commit, dispatch }, payload) {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(payload.email, payload.password)
-        .then((response) => {
-          commit("setUser", response.user);
-          dispatch("loadUserData");
-        })
-        .catch((error) => {
-          commit("error");
-        });
-    },
-    signOutAction({ commit }) {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          commit("setUser", null);
-          commit("setFavoritedArtworks", []);
-        })
-        .catch((error) => {
-          commit("error");
-        });
-    },
-    async loadUserData({ commit, state }) {
-      if (state.user !== null) {
-        commit("request");
-        try {
-          const favoritedArtworks = await firebaseModel.loadUserData(
-            state.user
-          );
-          commit("setFavoritedArtworks", favoritedArtworks);
-        } catch (error) {
-          commit("error");
-        } finally {
-          commit("complete");
-        }
-      }
-    },
-    async saveUserData({ commit, state }) {
-      if (state.user !== null) {
-        commit("request");
-        try {
-          await firebaseModel.saveUserData(state.user, state.model);
-        } catch (error) {
-          commit("error");
-        } finally {
-          commit("complete");
-        }
-      }
+    // Watcher
+    setWatch({ commit }, watch) {
+      commit("setWatch", watch);
     },
   },
   getters: {

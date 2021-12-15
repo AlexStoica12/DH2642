@@ -60,6 +60,8 @@
   </v-row>
 </template>
 <script>
+import firebaseModel from "../js/firebaseModel.js";
+
 export default {
   name: "Signup",
   props: ["signupDialog"],
@@ -88,10 +90,26 @@ export default {
   methods: {
     signup() {
       if (this.isValidated) {
-        this.$store
-          .dispatch("signUpAction", {
+        // Sign Up to Firebase
+        firebaseModel
+          .signUpAction({
             email: this.email,
             password: this.password,
+          })
+          .then((user) => {
+            this.$store.dispatch("setUser", user);
+          }) // Watch if User makes changes to favoritedArtworks, persist the data
+          .then(() => {
+            const watch = this.$store.watch(
+              (state, getters) => getters.favoritedArtworks,
+              (newValue) => {
+                firebaseModel.saveUserData(
+                  this.$store.getters.getUser,
+                  newValue
+                );
+              }
+            );
+            this.$store.dispatch("setWatch", watch);
           })
           .then(this.closeDialog(false));
       }
