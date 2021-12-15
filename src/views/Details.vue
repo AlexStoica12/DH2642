@@ -13,16 +13,16 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-container v-else>
+    <v-container v-else class="pt-5">
       <v-row>
-        <v-btn tile @click="navigateBack()">
+        <v-btn text @click="navigateBack()">
           <v-icon left>mdi-keyboard-backspace</v-icon>
           Go back
         </v-btn>
       </v-row>
       <v-row class="mt-0">
-        <v-col cols="8">
-          <v-sheet color="white" min-height="70vh" rounded="lg">
+        <v-col cols="12" md="8">
+          <v-sheet color="white" min-height="30vh" rounded="lg">
             <h1 class="pa-3">{{ currentArtworkDetails.title }}</h1>
             <h2 class="pa-3 pt-0">
               {{ currentArtists._embedded.artists[0].name }}
@@ -36,17 +36,28 @@
             ></v-img>
           </v-sheet>
         </v-col>
-        <v-col cols="4" class="pl-0">
-          <v-sheet color="white" min-height="70vh" rounded="lg">
-            <div class="pt-16">
-              <h1 class="pl-4 pt-10">Dimensions</h1>
+        <v-col cols="12" md="4" class="pl-0">
+          <v-sheet color="white" min-height="30vh" rounded="lg">
+            <div
+              :class="{
+                'pt-0': $vuetify.breakpoint.smAndDown,
+                'pt-16': $vuetify.breakpoint.mdAndUp,
+              }"
+              v-if="currentArtworkDetails.dimensions"
+            >
+              <h1
+                :class="{
+                  'pl-4 pt-3': $vuetify.breakpoint.smAndDown,
+                  'pl-4  pt-10': $vuetify.breakpoint.mdAndUp,
+                }"
+                v-if="currentArtworkDetails.dimensions.cm.text"
+              >
+                Dimensions
+              </h1>
+              <h1 v-else></h1>
               <h2 class="pl-4">
                 {{ currentArtworkDetails.dimensions.cm.text }}
               </h2>
-            </div>
-            <div>
-              <h1 class="pl-4 pt-5">Price</h1>
-              <h2 class="pl-4">{{ currentArtwork.price }}</h2>
             </div>
             <div>
               <h1 class="pl-4 pt-5">Gallery</h1>
@@ -207,10 +218,6 @@ export default {
       currentArtworkAdded: null,
       timeoutSnackbarAddToGallery: 2000,
       timeoutSnackbarCancelAddToGallery: 1000,
-      currentArtwork: {
-        price: "Price",
-        gallery: "Name of the gallery",
-      },
     };
   },
 };
