@@ -2,8 +2,7 @@
 <template>
   <v-card flat tile>
     <v-toolbar span class="rounded-xl mx-5 my-2 white">
-
-      <v-text-field
+     <v-text-field
         hide-details
         label="Type art name"
         v-model="searchString"
@@ -13,67 +12,46 @@
         dense
         single-line
         append-icon="mdi-magnify"
-      >
-      </v-text-field>
+      ></v-text-field>
     </v-toolbar>
     <v-container v-if="isLoading">
-      <div class="text-center">
+      <v-row align="center" justify="center">
+       <v-col align="center">
         <v-progress-circular
           indeterminate
           color="primary"
           :size="50"
         ></v-progress-circular>
-      </div>
+       </v-col>
+     </v-row>
     </v-container>
     <v-row v-else>
       <v-spacer></v-spacer>
       <v-col
-        v-for="artwork in artworks"
-        :key="artwork.id"
-        cols="12"
+        v-for="artwork in filterArtworkFeed"
+        v-bind:key="artwork.id"
+        :align-self="artwork"
+        :cols="artwork.flex"
         sm="6"
         md="4"
       >
-        <v-card @click="navigateTo(artwork)">
-          <v-img :src="artwork._links.thumbnail.href" height="300px">
-            <span
-              class="text-md-subtitle-2 white--text pl-4 pt-4 d-inline-block"
-              v-text="artwork.title"
-            ></span>
-          </v-img>
-
-          <v-card-actions class="white justify-center">
-            <v-col class="text-center">
-              <span
-                class="text-md-subtitle-2 black--text pl-4 pt-4 d-inline-block"
-                v-text="artwork.collecting_institution"
-              ></span>
-              <br />
-              <v-btn
-                v-for="(social, i) in socials"
-                :key="i"
-                :color="social.color"
-                class="white--text"
-                fab
-                icon
-                small
-              >
-                <v-icon>{{ social.icon }}</v-icon>
-              </v-btn>
-            </v-col>
-          </v-card-actions>
-        </v-card>
+      <HomeCard
+        v-bind:image-u-r-l="getLinkImage(artwork)"
+        v-bind:artwork-title="artwork.title"
+        v-bind:artwork-gallery="artwork.collecting_institution" 
+        @navigateToEvent="navigateTo(artwork)"           
+      />
       </v-col>
     </v-row>
   </v-card>
 </template>
 <script>
 // @ is an alias to /src
-//import Results from "../components/Results.vue";
 import artsySource from "@/js/artsySource";
-
+import HomeCard from "../components/homeCard.vue";
 export default {
   name: "Home",
+  components: {HomeCard},
   mounted() {
     if (this.token !== null) {
       this.searchArtworks();
@@ -84,22 +62,30 @@ export default {
       artworks: [],
       isLoading: true,
       searchString: "",
-      socials: [
-        {
-          icon: "mdi-facebook",
-          color: "indigo",
-        },
-        {
-          icon: "mdi-instagram",
-          color: "red lighten-3",
-        },
-      ],
+      
     };
   },
   computed: {
     token: function () {
       return this.$store.getters.currentToken;
     },
+    filterArtworkFeed : function (){
+
+      var artworksFeed = this.artworks;
+      var searchString = this.searchString;
+
+      if(!searchString){
+        return artworksFeed;
+      }
+      searchString = searchString.trim().toLowerCase();
+
+      artworksFeed = artworksFeed.filter(function (item){
+        if(item.title.toLowerCase().indexOf(searchString)!== -1){
+          return item;
+        }
+      })
+      return artworksFeed;
+    }
   },
   watch: {
     token() {
@@ -116,6 +102,13 @@ export default {
     navigateTo: function (artwork) {
       this.$store.dispatch("setCurrentArtwork", artwork.id);
       this.$router.push("/details");
+    },
+    getLinkImage: function (artwork) {
+      if (artwork._links.thumbnail) {
+        return artwork._links.thumbnail.href;
+      } else {
+        return "https://demechanica.com/wp-content/uploads/2018/07/placeholder.png";
+      }
     },
   },
 };
