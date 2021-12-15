@@ -46,9 +46,13 @@ const artsySource = {
       });
   },
   searchAllArtworks() {
-    return artsySource.apiCall("artworks?size=100").then((data) => {
-      return data;
-    });
+    const randInt = Math.floor(Math.random() * 10000) + 1;
+
+    return artsySource
+      .apiCall("artworks?size=100&offset=" + randInt.toString())
+      .then((data) => {
+        return data;
+      });
   },
   refreshToken() {
     return fetch(
