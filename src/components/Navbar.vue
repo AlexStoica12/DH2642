@@ -140,7 +140,7 @@ export default {
   methods: {
     // Helper function for navigation
     navigateTo: function (route) {
-      this.$router.push(route);
+      if (this.$route.path !== route) this.$router.push(route);
     },
     signOut: function () {
       firebaseModel.signOutAction().then(() => {
