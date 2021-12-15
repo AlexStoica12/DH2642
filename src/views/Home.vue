@@ -62,13 +62,6 @@ export default {
       this.$store.dispatch("setCurrentArtwork", artwork.id);
       this.$router.push("/details");
     },
-    getLinkImage: function (artwork) {
-      if (artwork._links.thumbnail) {
-        return artwork._links.thumbnail.href;
-      } else {
-        return "https://demechanica.com/wp-content/uploads/2018/07/placeholder.png";
-      }
-    },
   },
 };
 </script>
