@@ -1,10 +1,11 @@
 /* eslint-disable */
 <template>
   <HomeView
-    v-bind:searchString.sync="searchString"
+    v-bind:searchString="searchString"
     v-bind:filteredArtworks="filteredArtworks"
     v-bind:isLoading="isLoading"
     @navigateTo="navigateTo"
+    @onChange="onChange"
   />
 </template>
 <script>
@@ -61,6 +62,9 @@ export default {
     navigateTo: function (artwork) {
       this.$store.dispatch("setCurrentArtwork", artwork.id);
       this.$router.push("/details");
+    },
+    onChange: function (query) {
+      this.searchString = query;
     },
   },
 };

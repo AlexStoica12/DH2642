@@ -4,7 +4,8 @@
       <v-text-field
         hide-details
         label="Type art name"
-        v-model="searchString"
+        :value="searchString"
+        @input="onChange($event)"
         placeholder="Search"
         filled
         rounded
@@ -57,6 +58,9 @@ export default {
     },
     navigateHome: function () {
       this.$emit("navigateHome");
+    },
+    onChange: function (payload) {
+      this.$emit("onChange", payload);
     },
     getLinkImage: function (artwork) {
       if (artwork._links.thumbnail) {
