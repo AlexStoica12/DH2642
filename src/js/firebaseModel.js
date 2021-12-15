@@ -1,11 +1,8 @@
-import "../plugins/firebaseConfig.js";
-import firebase from "firebase/compat/app";
+import { auth, db } from "../plugins/firebaseConfig.js";
 
 const firebaseModel = {
   async loadUserData(user) {
     let favoritedArtworks;
-    const db = firebase.database();
-    console.log(user);
     await db
       .ref("artsyModel/" + user._delegate.uid)
       .once("value")
@@ -15,10 +12,43 @@ const firebaseModel = {
     return favoritedArtworks;
   },
   async saveUserData(user, model) {
-    const db = firebase.database();
-    db.ref("artsyModel/" + user._delegate.uid).set({
+    await db.ref("artsyModel/" + user._delegate.uid).set({
       favoritedArtworks: model.favoritedArtworks,
     });
+  },
+  async signUpAction(payload) {
+    await auth
+      .createUserWithEmailAndPassword(payload.email, payload.password)
+      .then((response) => {
+        // commit("setUser", response.user);
+        console.log(response);
+      })
+      .catch((error) => {
+        // commit("setError", error.message);
+        throw new Error(error);
+      });
+  },
+  async signInAction(payload) {
+    let user;
+    await auth
+      .signInWithEmailAndPassword(payload.email, payload.password)
+      .then((response) => {
+        user = response;
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+    return user;
+  },
+  async signOutAction() {
+    await auth
+      .signOut()
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
   },
 };
 export default firebaseModel;

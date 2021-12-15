@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import ArtsyModel from "../js/artsyModel.js";
 import artsySource from "../js/artsySource.js";
-import firebase from "firebase/compat/app";
+// import firebase from "firebase/compat/app";
 import firebaseModel from "../js/firebaseModel.js";
 /* eslint-disable */
 Vue.use(Vuex);
@@ -145,41 +145,6 @@ export default new Vuex.Store({
       }
     },
     // Firebase
-    signUpAction({ commit }, payload) {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(payload.email, payload.password)
-        .then((response) => {
-          commit("setUser", response.user);
-        })
-        .catch((error) => {
-          commit("setError", error.message);
-        });
-    },
-    signInAction({ commit, dispatch }, payload) {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(payload.email, payload.password)
-        .then((response) => {
-          commit("setUser", response.user);
-          dispatch("loadUserData");
-        })
-        .catch((error) => {
-          commit("error");
-        });
-    },
-    signOutAction({ commit }) {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          commit("setUser", null);
-          commit("setFavoritedArtworks", []);
-        })
-        .catch((error) => {
-          commit("error");
-        });
-    },
     async loadUserData({ commit, state }) {
       if (state.user !== null) {
         commit("request");
