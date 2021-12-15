@@ -26,7 +26,6 @@
       </v-row>
     </v-container>
     <v-row v-else>
-      <v-spacer></v-spacer>
       <v-col
         v-for="artwork in filterArtworkFeed"
         v-bind:key="artwork.id"
