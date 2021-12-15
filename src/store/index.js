@@ -88,7 +88,6 @@ export default new Vuex.Store({
         .refreshToken()
         .then((data) => {
           let token = data.token;
-          console.log("Committing Login, your token is:", token);
           localStorage.setItem("token", token);
           commit("auth_success", token);
         })
