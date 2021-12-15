@@ -12,18 +12,6 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  label="First name*"
-                  v-model="firstName"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  label="Last name*"
-                  v-model="lastName"
-                ></v-text-field>
-              </v-col>
               <v-col cols="12">
                 <v-form ref="emailForm">
                   <v-text-field
@@ -65,8 +53,6 @@ export default {
   props: ["signinDialog"],
   data() {
     return {
-      firstName: "",
-      lastName: "",
       email: "",
       password: "",
       mode: "sign-in",
@@ -103,8 +89,6 @@ export default {
       this.$emit("update:signinDialog", false);
     },
     clearForm: function () {
-      this.firstName = "";
-      this.lastName = "";
       this.email = "";
       this.password = "";
       this.$refs.emailForm.resetValidation();
