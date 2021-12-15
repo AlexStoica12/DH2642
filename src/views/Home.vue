@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <v-card flat tile>
+  <div>
     <v-toolbar span class="rounded-xl mx-5 my-2 white">
       <v-text-field
         hide-details
@@ -42,7 +42,7 @@
         />
       </v-col>
     </v-row>
-  </v-card>
+  </div>
 </template>
 <script>
 // @ is an alias to /src
@@ -110,23 +110,4 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.md-card {
-  width: 30vw;
-  margin: 4px;
-  display: inline-block;
-  vertical-align: top;
-}
-.home {
-  margin: 0 auto;
-}
-.subheading {
-  /*Google fonts: Archivo*/
-  font-family: "Archivo", sans-serif, Helvetica;
-  font-size: 16px !important;
-  font-weight: 400;
-  cursor: pointer;
-  color: #616161;
-  line-height: 1.8;
-}
-</style>
+<style lang="scss" scoped></style>
