@@ -1,17 +1,21 @@
 <template>
-  <v-container v-if="favoritedArtworks.length === 0">
-    <v-btn
-      color="black"
-      class="pa-4 mt-16 white--text"
-      rounded
-      elevation="2"
-      x-large
-      @click.stop="navigateHome()"
-    >
-      There's nothing in your Gallery yet, click here to explore more
-      paintings..
-    </v-btn>
-  </v-container>
+  <row v-if="favoritedArtworks.length === 0">
+    <v-row align="center" justify="center">
+      <v-col align="center" sm="6" md="4">
+        <v-btn
+          color="black"
+          class="pa-4 mt-16 white--text"
+          rounded
+          elevation="2"
+          x-large
+          @click.stop="navigateHome()"
+        >
+          There's nothing in your Gallery yet, click here to explore more
+          paintings..
+        </v-btn>
+      </v-col>
+    </v-row>
+  </row>
   <v-row v-else>
     <v-col
       v-for="artwork in favoritedArtworks"

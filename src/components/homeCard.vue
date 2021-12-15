@@ -2,6 +2,7 @@
   <v-card class="pa-0 flex-column" outlined tile @click="navigateTo()">
     <v-img
       height="300px"
+      :cover="true"
       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
       :src="imageURL"
     >
