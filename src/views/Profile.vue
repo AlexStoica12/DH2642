@@ -1,5 +1,18 @@
 <template>
-  <v-row>
+  <v-container v-if="favoritedArtworks.length === 0">
+    <v-btn
+      color="black"
+      class="pa-4 mt-16 white--text"
+      rounded
+      elevation="2"
+      x-large
+      @click.stop="navigateHome()"
+    >
+      There's nothing in your Gallery yet, click here to explore more
+      paintings..
+    </v-btn>
+  </v-container>
+  <v-row v-else>
     <v-col
       v-for="artwork in favoritedArtworks"
       v-bind:key="artwork.id"
@@ -11,7 +24,7 @@
         v-bind:image-u-r-l="getLinkImage(artwork)"
         v-bind:artwork-title="artwork.title"
         v-bind:artwork-gallery="artwork.collecting_institution"
-        @navigateToEvent="navigateTo(artwork)"
+        @navigateTo="navigateTo(artwork)"
       />
     </v-col>
   </v-row>
@@ -34,6 +47,11 @@ export default {
     },
     navigateHome: function () {
       this.$router.push("/home");
+    },
+    // Helper function for navigation
+    navigateTo: function (artwork) {
+      this.$store.dispatch("setCurrentArtwork", artwork.id);
+      this.$router.push("/details");
     },
     getLinkImage: function (artwork) {
       if (artwork._links.thumbnail) {

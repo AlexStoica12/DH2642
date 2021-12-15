@@ -38,7 +38,7 @@
           v-bind:image-u-r-l="getLinkImage(artwork)"
           v-bind:artwork-title="artwork.title"
           v-bind:artwork-gallery="artwork.collecting_institution"
-          @navigateToEvent="navigateTo(artwork)"
+          @navigateTo="navigateTo(artwork)"
         />
       </v-col>
     </v-row>
