@@ -69,6 +69,9 @@ export default new Vuex.Store({
     setUser(state, payload) {
       state.user = payload;
     },
+    signOut(state) {
+      state.user = null;
+    },
     setError(state, payload) {
       state.error = payload;
     },
@@ -101,6 +104,12 @@ export default new Vuex.Store({
     },
     setFavoritedArtworks({ commit }, artworks) {
       commit("setFavoritedArtworks", artworks);
+    },
+    setUser({ commit }, user) {
+      commit("setUser", user.user._delegate.uid);
+    },
+    signOut({ commit }) {
+      commit("signOut");
     },
     async setCurrentArtwork({ commit }, id) {
       commit("request");

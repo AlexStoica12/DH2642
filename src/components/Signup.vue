@@ -60,6 +60,8 @@
   </v-row>
 </template>
 <script>
+import firebaseModel from "../js/firebaseModel.js";
+
 export default {
   name: "Signup",
   props: ["signupDialog"],
@@ -88,10 +90,13 @@ export default {
   methods: {
     signup() {
       if (this.isValidated) {
-        this.$store
-          .dispatch("signUpAction", {
+        firebaseModel
+          .signUpAction({
             email: this.email,
             password: this.password,
+          })
+          .then((user) => {
+            this.$store.dispatch("setUser", user);
           })
           .then(this.closeDialog(false));
       }

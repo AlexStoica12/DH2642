@@ -17,16 +17,16 @@ const firebaseModel = {
     });
   },
   async signUpAction(payload) {
+    let user;
     await auth
       .createUserWithEmailAndPassword(payload.email, payload.password)
       .then((response) => {
-        // commit("setUser", response.user);
-        console.log(response);
+        user = response;
       })
       .catch((error) => {
-        // commit("setError", error.message);
         throw new Error(error);
       });
+    return user;
   },
   async signInAction(payload) {
     let user;
