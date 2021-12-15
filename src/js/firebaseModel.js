@@ -1,15 +1,48 @@
 import { auth, db } from "../plugins/firebaseConfig.js";
+import store from "../store/index.js";
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    store.commit("setUser", user._delegate.uid);
+    firebaseModel
+      .loadUserData(user._delegate.uid)
+      .then((favoritedArtworks) => {
+        store.dispatch("setFavoritedArtworks", favoritedArtworks);
+      })
+      .then(() => {
+        const watch = store.watch(
+          (state, getters) => getters.favoritedArtworks,
+          (newValue) => {
+            if (store.getters.getUser !== null) {
+              firebaseModel.saveUserData(store.getters.getUser, newValue);
+            }
+          }
+        );
+        store.dispatch("setWatch", watch);
+      });
+  } else {
+    if (store.getters.getUser !== null) {
+      store.dispatch("signOut");
+    }
+  }
+});
 
 const firebaseModel = {
   async loadUserData(userId) {
-    let favoritedArtworks;
-    await db
-      .ref("artsyModel/" + userId)
-      .once("value")
-      .then(function (snapshot) {
-        favoritedArtworks = snapshot.val().favoritedArtworks;
-      });
-    return favoritedArtworks;
+    if (userId !== null) {
+      let favoritedArtworks;
+      await db
+        .ref("artsyModel/" + userId)
+        .once("value")
+        .then(function (snapshot) {
+          if (snapshot.exists()) {
+            favoritedArtworks = snapshot.val().favoritedArtworks;
+          } else {
+            favoritedArtworks = [];
+          }
+        });
+      return favoritedArtworks;
+    }
   },
   async saveUserData(userId, favoritedArtworks) {
     await db.ref("artsyModel/" + userId).set({
@@ -43,9 +76,7 @@ const firebaseModel = {
   async signOutAction() {
     await auth
       .signOut()
-      .then((response) => {
-        console.log(response);
-      })
+      .then()
       .catch((error) => {
         throw new Error(error);
       });

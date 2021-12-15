@@ -95,31 +95,6 @@ export default {
             email: this.email,
             password: this.password,
           })
-          .then((user) => {
-            this.$store.dispatch("setUser", user);
-          })
-          // Load User's Data
-          .then(() => {
-            firebaseModel
-              .loadUserData(this.$store.getters.getUser)
-              .then((favoritedArtworks) => {
-                console.log(favoritedArtworks);
-                this.$store.dispatch("setFavoritedArtworks", favoritedArtworks);
-              });
-          })
-          // Watch if User makes changes to favoritedArtworks, persist the data
-          .then(() => {
-            const watch = this.$store.watch(
-              (state, getters) => getters.favoritedArtworks,
-              (newValue) => {
-                firebaseModel.saveUserData(
-                  this.$store.getters.getUser,
-                  newValue
-                );
-              }
-            );
-            this.$store.dispatch("setWatch", watch);
-          })
           .then(this.closeDialog(false));
       }
     },

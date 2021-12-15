@@ -144,7 +144,6 @@ export default {
     },
     signOut: function () {
       firebaseModel.signOutAction().then(() => {
-        this.$store.dispatch("signOut");
         this.drawer = false;
       });
     },
