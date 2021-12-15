@@ -89,6 +89,7 @@ export default {
   methods: {
     signin() {
       if (this.isValidated) {
+        // Sign Into Firebase
         firebaseModel
           .signInAction({
             email: this.email,
@@ -97,6 +98,7 @@ export default {
           .then((user) => {
             this.$store.dispatch("setUser", user);
           })
+          // Load User's Data
           .then(() => {
             firebaseModel
               .loadUserData(this.$store.getters.getUser)
@@ -105,18 +107,18 @@ export default {
                 this.$store.dispatch("setFavoritedArtworks", favoritedArtworks);
               });
           })
+          // Watch if User makes changes to favoritedArtworks, persist the data
           .then(() => {
-            this.$store.watch(
+            const watch = this.$store.watch(
               (state, getters) => getters.favoritedArtworks,
               (newValue) => {
-                console.log(this.$store.getters.getUser);
-                console.log(newValue);
                 firebaseModel.saveUserData(
                   this.$store.getters.getUser,
                   newValue
                 );
               }
             );
+            this.$store.dispatch("setWatch", watch);
           })
           .then(this.closeDialog(false));
       }

@@ -2,8 +2,6 @@ import Vue from "vue";
 import Vuex from "vuex";
 import ArtsyModel from "../js/artsyModel.js";
 import artsySource from "../js/artsySource.js";
-// import firebase from "firebase/compat/app";
-import firebaseModel from "../js/firebaseModel.js";
 /* eslint-disable */
 Vue.use(Vuex);
 
@@ -16,6 +14,8 @@ export default new Vuex.Store({
     // Firebase
     user: null,
     error: null,
+    // If persisting data, watch changes
+    watch: null,
   },
   mutations: {
     // Api Requests
@@ -75,6 +75,10 @@ export default new Vuex.Store({
     setError(state, payload) {
       state.error = payload;
     },
+    // Watcher
+    setWatch(state, payload) {
+      state.watch = payload;
+    },
   },
   actions: {
     // Refresh Token
@@ -106,8 +110,10 @@ export default new Vuex.Store({
     setUser({ commit }, user) {
       commit("setUser", user.user._delegate.uid);
     },
-    signOut({ commit }) {
+    signOut({ commit, state, dispatch }) {
       commit("signOut");
+      state.watch();
+      dispatch("setWatch", null);
     },
     async setCurrentArtwork({ commit }, id) {
       commit("request");
@@ -151,33 +157,9 @@ export default new Vuex.Store({
         commit("complete");
       }
     },
-    // Firebase
-    async loadUserData({ commit, state }) {
-      if (state.user !== null) {
-        commit("request");
-        try {
-          const favoritedArtworks = await firebaseModel.loadUserData(
-            state.user
-          );
-          commit("setFavoritedArtworks", favoritedArtworks);
-        } catch (error) {
-          commit("error");
-        } finally {
-          commit("complete");
-        }
-      }
-    },
-    async saveUserData({ commit, state }) {
-      if (state.user !== null) {
-        commit("request");
-        try {
-          await firebaseModel.saveUserData(state.user, state.model);
-        } catch (error) {
-          commit("error");
-        } finally {
-          commit("complete");
-        }
-      }
+    // Watcher
+    setWatch({ commit }, watch) {
+      commit("setWatch", watch);
     },
   },
   getters: {
