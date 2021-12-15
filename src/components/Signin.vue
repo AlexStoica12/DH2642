@@ -12,18 +12,6 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  label="First name*"
-                  v-model="firstName"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  label="Last name*"
-                  v-model="lastName"
-                ></v-text-field>
-              </v-col>
               <v-col cols="12">
                 <v-form ref="emailForm">
                   <v-text-field
@@ -50,6 +38,18 @@
           <p>*indicates required field</p>
         </v-card-text>
 
+        <!-- Error Message -->
+        <v-alert
+          v-if="error !== ''"
+          outlined
+          dense
+          prominent
+          type="error"
+          class="mx-2 text-caption text-center"
+        >
+          {{ error }}
+        </v-alert>
+
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn class="ma-3" text @click="signin()"> Sign in </v-btn>
@@ -65,11 +65,10 @@ export default {
   props: ["signinDialog"],
   data() {
     return {
-      firstName: "",
-      lastName: "",
       email: "",
       password: "",
       mode: "sign-in",
+      error: "",
       rules: {
         empty: (v) => !!v || "Required.",
         email: (v) =>
@@ -95,32 +94,12 @@ export default {
             email: this.email,
             password: this.password,
           })
-          .then((user) => {
-            this.$store.dispatch("setUser", user);
-          })
-          // Load User's Data
           .then(() => {
-            firebaseModel
-              .loadUserData(this.$store.getters.getUser)
-              .then((favoritedArtworks) => {
-                console.log(favoritedArtworks);
-                this.$store.dispatch("setFavoritedArtworks", favoritedArtworks);
-              });
+            this.closeDialog();
           })
-          // Watch if User makes changes to favoritedArtworks, persist the data
-          .then(() => {
-            const watch = this.$store.watch(
-              (state, getters) => getters.favoritedArtworks,
-              (newValue) => {
-                firebaseModel.saveUserData(
-                  this.$store.getters.getUser,
-                  newValue
-                );
-              }
-            );
-            this.$store.dispatch("setWatch", watch);
-          })
-          .then(this.closeDialog(false));
+          .catch((err) => {
+            this.error = err;
+          });
       }
     },
     closeDialog: function () {
@@ -128,10 +107,9 @@ export default {
       this.$emit("update:signinDialog", false);
     },
     clearForm: function () {
-      this.firstName = "";
-      this.lastName = "";
       this.email = "";
       this.password = "";
+      this.error = "";
       this.$refs.emailForm.resetValidation();
       this.$refs.passwordForm.resetValidation();
     },

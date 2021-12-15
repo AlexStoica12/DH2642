@@ -12,15 +12,15 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6">
                 <v-text-field
-                  label="First name*"
+                  label="First name"
                   v-model="firstName"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6">
                 <v-text-field
-                  label="Last name*"
+                  label="Last name"
                   v-model="lastName"
                 ></v-text-field>
               </v-col>
@@ -49,10 +49,19 @@
           </v-container>
           <p>*indicates required field</p>
         </v-card-text>
-
+        <!-- Error Message -->
+        <v-alert
+          v-if="error !== ''"
+          outlined
+          dense
+          prominent
+          type="error"
+          class="mx-2 text-caption text-center"
+        >
+          {{ error }}
+        </v-alert>
         <v-card-actions>
           <v-spacer></v-spacer>
-
           <v-btn class="ma-3" text @click="signup()"> Sign Up </v-btn>
         </v-card-actions>
       </v-card>
@@ -71,6 +80,7 @@ export default {
       lastName: "",
       email: "",
       password: "",
+      error: "",
       rules: {
         empty: (v) => !!v || "Required.",
         email: (v) =>
@@ -96,22 +106,12 @@ export default {
             email: this.email,
             password: this.password,
           })
-          .then((user) => {
-            this.$store.dispatch("setUser", user);
-          }) // Watch if User makes changes to favoritedArtworks, persist the data
           .then(() => {
-            const watch = this.$store.watch(
-              (state, getters) => getters.favoritedArtworks,
-              (newValue) => {
-                firebaseModel.saveUserData(
-                  this.$store.getters.getUser,
-                  newValue
-                );
-              }
-            );
-            this.$store.dispatch("setWatch", watch);
+            this.closeDialog();
           })
-          .then(this.closeDialog(false));
+          .catch((err) => {
+            this.error = err;
+          });
       }
     },
     closeDialog: function () {
@@ -123,6 +123,7 @@ export default {
       this.lastName = "";
       this.email = "";
       this.password = "";
+      this.error = "";
       this.$refs.emailForm.resetValidation();
       this.$refs.passwordForm.resetValidation();
     },
