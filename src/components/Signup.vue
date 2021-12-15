@@ -49,10 +49,19 @@
           </v-container>
           <p>*indicates required field</p>
         </v-card-text>
-
+        <!-- Error Message -->
+        <v-alert
+          v-if="error !== ''"
+          outlined
+          dense
+          prominent
+          type="error"
+          class="mx-2 text-caption text-center"
+        >
+          {{ error }}
+        </v-alert>
         <v-card-actions>
           <v-spacer></v-spacer>
-
           <v-btn class="ma-3" text @click="signup()"> Sign Up </v-btn>
         </v-card-actions>
       </v-card>
@@ -71,6 +80,7 @@ export default {
       lastName: "",
       email: "",
       password: "",
+      error: "",
       rules: {
         empty: (v) => !!v || "Required.",
         email: (v) =>
@@ -96,7 +106,12 @@ export default {
             email: this.email,
             password: this.password,
           })
-          .then(this.closeDialog(false));
+          .then(() => {
+            this.closeDialog();
+          })
+          .catch((err) => {
+            this.error = err;
+          });
       }
     },
     closeDialog: function () {
@@ -108,6 +123,7 @@ export default {
       this.lastName = "";
       this.email = "";
       this.password = "";
+      this.error = "";
       this.$refs.emailForm.resetValidation();
       this.$refs.passwordForm.resetValidation();
     },
