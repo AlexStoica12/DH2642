@@ -96,11 +96,9 @@ export default new Vuex.Store({
     // Model
     addToFavorited({ commit, dispatch }, artwork) {
       commit("addToFavorited", artwork);
-      dispatch("saveUserData");
     },
     removeFromFavorited({ commit, dispatch }, artwork) {
       commit("removeFromFavorited", artwork);
-      dispatch("saveUserData");
     },
     setFavoritedArtworks({ commit }, artworks) {
       commit("setFavoritedArtworks", artworks);

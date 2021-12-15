@@ -1,19 +1,19 @@
 import { auth, db } from "../plugins/firebaseConfig.js";
 
 const firebaseModel = {
-  async loadUserData(user) {
+  async loadUserData(userId) {
     let favoritedArtworks;
     await db
-      .ref("artsyModel/" + user._delegate.uid)
+      .ref("artsyModel/" + userId)
       .once("value")
       .then(function (snapshot) {
         favoritedArtworks = snapshot.val().favoritedArtworks;
       });
     return favoritedArtworks;
   },
-  async saveUserData(user, model) {
-    await db.ref("artsyModel/" + user._delegate.uid).set({
-      favoritedArtworks: model.favoritedArtworks,
+  async saveUserData(userId, favoritedArtworks) {
+    await db.ref("artsyModel/" + userId).set({
+      favoritedArtworks: favoritedArtworks,
     });
   },
   async signUpAction(payload) {

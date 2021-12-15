@@ -97,6 +97,27 @@ export default {
           .then((user) => {
             this.$store.dispatch("setUser", user);
           })
+          .then(() => {
+            firebaseModel
+              .loadUserData(this.$store.getters.getUser)
+              .then((favoritedArtworks) => {
+                console.log(favoritedArtworks);
+                this.$store.dispatch("setFavoritedArtworks", favoritedArtworks);
+              });
+          })
+          .then(() => {
+            this.$store.watch(
+              (state, getters) => getters.favoritedArtworks,
+              (newValue) => {
+                console.log(this.$store.getters.getUser);
+                console.log(newValue);
+                firebaseModel.saveUserData(
+                  this.$store.getters.getUser,
+                  newValue
+                );
+              }
+            );
+          })
           .then(this.closeDialog(false));
       }
     },
