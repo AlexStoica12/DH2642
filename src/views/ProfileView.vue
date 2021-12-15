@@ -39,8 +39,8 @@ export default {
   components: { HomeCard },
 
   methods: {
-    navigateTo: function () {
-      this.$emit("navigateTo");
+    navigateTo: function (artwork) {
+      this.$emit("navigateTo", artwork);
     },
     navigateHome: function () {
       this.$emit("navigateHome");

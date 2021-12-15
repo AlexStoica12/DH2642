@@ -1,5 +1,9 @@
 <template>
-  <ProfileView v-bind:favorited-artworks="favoritedArtworks" />
+  <ProfileView
+    v-bind:favorited-artworks="favoritedArtworks"
+    @navigateTo="navigateTo"
+    @navigateHome="navigateHome"
+  />
 </template>
 
 <script>
