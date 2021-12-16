@@ -3,6 +3,7 @@
     v-bind:favorited-artworks="favoritedArtworks"
     @navigateTo="navigateTo"
     @navigateHome="navigateHome"
+    @removeFrom="removeFrom"
   />
 </template>
 
@@ -21,7 +22,7 @@ export default {
     },
   },
   methods: {
-    removeArtworkFromGallery: function (artwork) {
+    removeFrom: function (artwork) {
       this.$store.dispatch("removeFromFavorited", artwork);
     },
     navigateHome: function () {
