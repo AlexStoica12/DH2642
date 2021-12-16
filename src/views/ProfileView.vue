@@ -8,7 +8,7 @@
           rounded
           elevation="2"
           x-large
-          @click.stop="navigateHome()"
+          @click.stop="$emit('navigateHome')"
         >
           There's nothing in your Gallery yet, click here to explore more
           paintings..
@@ -28,7 +28,7 @@
         v-bind:image-u-r-l="getLinkImage(artwork)"
         v-bind:artwork-title="artwork.title"
         v-bind:artwork-gallery="artwork.collecting_institution"
-        @navigateTo="navigateTo(artwork)"
+        @navigateTo="$emit('navigateTo', artwork)"
       />
     </v-col>
   </v-row>
@@ -43,12 +43,7 @@ export default {
   components: { HomeCard },
 
   methods: {
-    navigateTo: function (artwork) {
-      this.$emit("navigateTo", artwork);
-    },
-    navigateHome: function () {
-      this.$emit("navigateHome");
-    },
+    // Render image from artwork
     getLinkImage: function (artwork) {
       if (artwork._links.thumbnail) {
         return artwork._links.thumbnail.href;
