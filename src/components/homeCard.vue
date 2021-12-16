@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-0 flex-column" outlined tile @click="navigateTo()">
+  <v-card class="pa-0 flex-column" outlined tile @click="$emit('navigateTo')">
     <v-img
       height="300px"
       :cover="true"
@@ -27,13 +27,5 @@ export default {
   name: "HomeCard",
   props: ["imageURL", "artworkTitle", "artworkGallery"],
   emits: ["navigateTo"],
-  data: function () {
-    return {};
-  },
-  methods: {
-    navigateTo: function () {
-      this.$emit("navigateTo");
-    },
-  },
 };
 </script>
