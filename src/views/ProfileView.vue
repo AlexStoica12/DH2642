@@ -13,9 +13,8 @@
           class="pa-4 mt-16 white--text"
           rounded
           elevation="2"
-          dense
-          :x-small="$vuetify.breakpoint.smAndDown"
-          @click.stop="navigateHome()"
+          x-large
+          @click.stop="$emit('navigateHome')"
         >
           Click here to explore art..
         </v-btn>
@@ -35,8 +34,7 @@
         v-bind:image-u-r-l="getLinkImage(artwork)"
         v-bind:artwork-title="artwork.title"
         v-bind:artwork-gallery="artwork.collecting_institution"
-        @navigateTo="navigateTo(artwork)"
-        @removeFrom="removeFrom(artwork)"
+        @navigateTo="$emit('navigateTo', artwork)"
       />
     </v-col>
   </v-row>
@@ -50,15 +48,7 @@ export default {
   props: ["favoritedArtworks"],
   components: { HomeCard },
   methods: {
-    navigateTo: function (artwork) {
-      this.$emit("navigateTo", artwork);
-    },
-    navigateHome: function () {
-      this.$emit("navigateHome");
-    },
-    removeFrom: function (artwork) {
-      this.$emit("removeFrom", artwork);
-    },
+    // Render image from artwork
     getLinkImage: function (artwork) {
       if (artwork._links.thumbnail) {
         return artwork._links.thumbnail.href;
