@@ -13,29 +13,16 @@
     </v-img>
     <v-card-actions class="white justify-center">
       <v-row 
-      class="mb-6"
+      class="mb-0"
       align="center"
       justify="center"
       >
-      <v-container>
       <v-col class="text-center">
         <span
-          class="text-md-subtitle-2 black--text pl-4 pt-4 d-inline-block"
+          class="text-md-subtitle-2 black--text pl-1 pt-4 d-inline-flex"
           v-text="artworkGallery"
         ></span>
       </v-col>
-      </v-container>
-      <v-flex justify-center>
-      <v-btn
-        color="black"
-        class="pa-4 mt-16 white--text"
-        rounded
-        elevation="2"
-        @click.stop="removeFrom()"
-        >
-          Remove
-        </v-btn>
-      </v-flex>
       </v-row>
     </v-card-actions>
   </v-card>
@@ -43,7 +30,7 @@
 
 <script>
 export default {
-  name: "HomeCard",
+  name: "ArtworkCard",
   props: ["imageURL", "artworkTitle", "artworkGallery"],
   emits: ["navigateTo"],
 };

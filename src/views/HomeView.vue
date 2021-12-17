@@ -33,7 +33,7 @@
         sm="6"
         md="4"
       >
-        <HomeCard
+        <ArtworkCard
           v-bind:image-u-r-l="getLinkImage(artwork)"
           v-bind:artwork-title="artwork.title"
           v-bind:artwork-gallery="artwork.collecting_institution"
@@ -45,12 +45,12 @@
 </template>
 
 <script>
-import HomeCard from "../components/homeCard.vue";
+import ArtworkCard from "../components/artworkCard.vue";
 
 export default {
   name: "HomeView",
   props: ["searchString", "filteredArtworks", "isLoading"],
-  components: { HomeCard },
+  components: { ArtworkCard },
 
   methods: {
     // Render image from artwork
