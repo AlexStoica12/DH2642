@@ -1,5 +1,6 @@
-/* eslint-disable */
 <template>
+  <!-- Home Presenter. Sends data from Vuex store to View. 
+  Checks events from View, tells model how to change -->
   <HomeView
     v-bind:searchString="searchString"
     v-bind:filteredArtworks="filteredArtworks"
@@ -8,14 +9,15 @@
     @onChange="onChange"
   />
 </template>
+
 <script>
-// @ is an alias to /src
 import artsySource from "@/js/artsySource";
 import HomeView from "./HomeView.vue";
 
 export default {
   name: "Home",
   components: { HomeView },
+  // On load, get all the artworks if token not null
   mounted() {
     if (this.token !== null) {
       this.searchArtworks();
@@ -23,15 +25,19 @@ export default {
   },
   data() {
     return {
+      // Artworks
       artworks: [],
       isLoading: true,
+      // Search String for filtering artworks
       searchString: "",
     };
   },
   computed: {
+    // Get token from Store
     token: function () {
       return this.$store.getters.currentToken;
     },
+    // Filters artworks based on search string, returns filterArtworks
     filteredArtworks: function () {
       var filteredArtworks = this.artworks;
       var searchString = this.searchString;
@@ -48,11 +54,13 @@ export default {
     },
   },
   watch: {
+    // If token is null and becomes not null, get artworks
     token() {
       this.searchArtworks();
     },
   },
   methods: {
+    // Get the artworks from artsty
     async searchArtworks() {
       let artworks = await artsySource.searchAllArtworks();
       this.artworks = artworks._embedded.artworks;

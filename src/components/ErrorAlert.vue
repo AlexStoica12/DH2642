@@ -1,4 +1,6 @@
 <template>
+  <!-- Error Alert if problems with Sign in or Sign up
+Accepts the error message as a prop -->
   <v-alert
     v-if="error !== ''"
     outlined

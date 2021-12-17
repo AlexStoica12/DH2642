@@ -1,4 +1,6 @@
 <template>
+  <!-- A card with an image of an artwork, the artwork title and "Add To Gallery" -->
+  <!-- If artwork clicked, emit navigate to details page with new artwork -->
   <v-card
     class="ma-2 mb-5 d-flex flex-column"
     height="350"
@@ -16,6 +18,7 @@
       </div>
     </v-card-text>
     <v-spacer></v-spacer>
+    <!-- On Add to Gallery, Emit Open Snackbar and emit addArtworkToGallery -->
     <v-card-actions>
       <v-btn
         color="orange"
@@ -43,6 +46,7 @@ export default {
   data: function () {
     return {};
   },
+  // Emit event up tree
   methods: {
     addArtworkToGallery: function () {
       this.$emit("addArtworkToGalleryEvent");

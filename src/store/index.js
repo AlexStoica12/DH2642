@@ -88,19 +88,17 @@ export default new Vuex.Store({
         .refreshToken()
         .then((data) => {
           let token = data.token;
-          localStorage.setItem("token", token);
           commit("auth_success", token);
         })
         .catch((err) => {
           commit("auth_error");
-          localStorage.removeItem("token");
         });
     },
     // Model
-    addToFavorited({ commit, dispatch }, artwork) {
+    addToFavorited({ commit }, artwork) {
       commit("addToFavorited", artwork);
     },
-    removeFromFavorited({ commit, dispatch }, artwork) {
+    removeFromFavorited({ commit }, artwork) {
       commit("removeFromFavorited", artwork);
     },
     setFavoritedArtworks({ commit }, artworks) {

@@ -1,4 +1,6 @@
 <template>
+  <!-- Profile Presenter. Sends data from Vuex store to View. 
+  Checks events from View, tells model how to change -->
   <ProfileView
     v-bind:favorited-artworks="favoritedArtworks"
     @navigateTo="navigateTo"
