@@ -1,66 +1,74 @@
 # artpoint
 
 Artpoint is an application designed for helping people discover new art and allowing them to keep a personal Gallery of the art they like.
-It is possible to search for artworks, add artworks to your Gallery, explore similar artworks to the ones you like, and
-find more artworks from your favorite artist.
+It is possible to search for artworks, add artworks to your Gallery, explore similar artworks to the ones you like, and find more artworks from your favorite artist.
 
 Artwork uses the [Artsy API](https://www.artsy.net/).
 
-## Done so far
+# Agreement with Cristian
 
-- Created initial framework for the application including all routes. (Home, Profile, Signin, Details)
-- Set up API source file, containing needed API calls.
-- Created the Model, which keeps a state for the current user.
-- Created the Home (or search) view that displays an initial set of artworks retrieved from the API.
-- Created static (with fake data) views for Profile, Signin, and Details.
-- Home calls the api
-- Set up vuex store.
-- Navbar, for application navigation.
+We are using Model View View Model (MV-VM) and Vue's outdated template syntax rather than the powerful tool known as JSX. As a result, most of our views do not follow View-Presenter seperation. We have an agreement with Cristian regarding this issue.
 
-## To Do
+The only views following View-Presenter seperation are:
 
-- Seperation of concerns need to be even better (Vuex, Api and Model leak into each other)
-- Make views dynamic, such that they use the model and API data.
-- Configure firebase for 1 user
-- Configure firebase to allow for multi-user use of the application.
-- Set up authentication.
+- Home (Presenter) | HomeView (View)
+- Profile (Presenter) | ProfileView (View)
 
-If time allows:
+# Project structure
 
-- Allow the user to keep multiple collections in their Gallery.
-- Allow users to browse other people's Galleries.
+### General Files
 
-## Project structure
+`src/App.vue`: Initalises the app. Router-View is the main part of the app, Navbar above all screens. Calls "login" in Vuex store to retrieve token from ArtsyAPI and stores in Vuex store.
 
-`src/js/apiConfig.js`: API config containing tokens.
+### Router
+
+`src/router/index.js`: Router file containing the application's routes. It defines which Views should be rendered on specific routes and defines the default route.
+
+### Model
 
 `src/js/artsyModel.js`: Model for business logic.
 
+### State Management
+
+`src/store/index.js`: Vuex store for keeping application state such as the model, api token (X-App Token is required to use API) and User ID (to check if a user is logged in)
+
+### API
+
+`src/js/apiConfig.js`: API config containing tokens.  
 `src/js/artsySource.js`: API interface, containing function for each endpoint needed in Artpoint.
 
-`src/router/index.js`: Router file containing the application's routes.
+### Persistence
 
-`src/store/index.js`: Vuex store for keeping application state.
+`src/plugins/firebaseConfig.js`: Config file for firebaseModel. It defines the project, intialises the database, auth and sets the database persistence to true (if user closes website, remembers that they were logged in)  
+`src/js/firebaseModel.js`: Initially defines an observer to check if a user is logged in, if so, it loads the users data and an observer is created to watch the model. Everytime there is a change to the favoritedArtworks, called saveUserData to persist the model. If a user logs out, favoritedArtworks observer is disabled and persistance is no longer in use.
 
-`src/components/Navbar.vue`: Contains the application's navbar.
+### Views
 
-`src/views/Details.vue`: Details view displaying the current artwork.
+`src/views/Details.vue`: Details view displaying the current artwork, similar artworks to the current artwork, and additional artworks from the artist of the currenet artwork..  
+`src/views/Home.vue`: Home presenter.  
+`src/views/HomeView.vue`: Home view displaying an initial set of artworks and containing search functionality.  
+`src/views/Profile.vue`: Profile presenter.  
+`src/views/ProfileView.vue`: Profile view displaying the favorited artworks to My Gallery. When favorited artworks is empty, then it will direct to the home to explore artworks.
 
-`src/views/Home.vue`: Home view displaying an initial set of artworks and containing search functionality.
+### Components
 
-`src/views/Profile.vue`: Profile view displaying the artworks to My Gallery.
+`src/components/detailsCard.vue`: Contains the application's details card.  
+`src/components/homeCard.vue`: Contains the application's home card.  
+`src/components/Navbar.vue`: Contains the application's navbar.  
+`src/components/Signin.vue`: Contains the application's signin dialog.  
+`src/components/Signup.vue`: Contains the application's signup dialog.
 
-`src/views/Signin.vue`: Signin containing user signin for authentication.
-
-`src/views/Test.vue`: Used for testing individual components.
-
-`src/App.vue`:
-
-`src/main.js`:
+### Heroku
 
 `server.js`: Heroku config
 
-## Project setup
+### Third Party Plugin
+
+`src\plugins\vuetify.js`: Initialises of the third party plugin Vuetify. Throughout the app, Vuetify is used to help create the Views easily.
+
+# Project setup
+
+### Install the dependencies
 
 ```
 npm install
@@ -72,16 +80,15 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Persistence
+
+By default persistence is disabled. We allow users to use the app and add to their local gallery without persisting the data. Once you sign up or sign in with an account, your data will begin persisting.
+
+Feel free to use this account:
 
 ```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
+email: taco5@gmail.com
+password: 123456
 ```
 
 ### Customize configuration
