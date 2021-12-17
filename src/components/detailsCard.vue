@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="ma-2 mb-5 d-flex flex-column"
-    height="325"
+    height="350"
     width="300"
     hover
     @click="navigateTo()"
