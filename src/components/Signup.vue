@@ -1,4 +1,9 @@
 <template>
+  <!-- Sign Up Dialog to allow the user to sign up
+    First Name and Last Name is optional
+    Email: Required, Must be valid format
+    Password: Required, Must be valid format
+ -->
   <v-row justify="center">
     <v-dialog v-model="signupDialog" persistent max-width="600px">
       <v-card>
@@ -50,16 +55,8 @@
           <p>*indicates required field</p>
         </v-card-text>
         <!-- Error Message -->
-        <v-alert
-          v-if="error !== ''"
-          outlined
-          dense
-          prominent
-          type="error"
-          class="mx-2 text-caption text-center"
-        >
-          {{ error }}
-        </v-alert>
+        <ErrorAlert :error="error" />
+
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn class="ma-3" text @click="signup()"> Sign Up </v-btn>
@@ -70,10 +67,13 @@
 </template>
 <script>
 import firebaseModel from "../js/firebaseModel.js";
+import ErrorAlert from "./ErrorAlert.vue";
 
 export default {
   name: "Signup",
   props: ["signupDialog"],
+  components: { ErrorAlert },
+
   data() {
     return {
       firstName: "",
@@ -81,6 +81,7 @@ export default {
       email: "",
       password: "",
       error: "",
+      // Rules for textform
       rules: {
         empty: (v) => !!v || "Required.",
         email: (v) =>
@@ -91,6 +92,8 @@ export default {
     };
   },
   computed: {
+    // Checks email and password to see if a rule is broken
+    // Both must pass in order to submit the form
     isValidated: function () {
       const emailFormValid = this.$refs.emailForm.validate();
       const passwordFormValid = this.$refs.passwordForm.validate();
@@ -99,6 +102,8 @@ export default {
   },
   methods: {
     signup() {
+      // Rules passed
+
       if (this.isValidated) {
         // Sign Up to Firebase
         firebaseModel
@@ -109,15 +114,19 @@ export default {
           .then(() => {
             this.closeDialog();
           })
+          // If error occurs, show ErrorAlert
           .catch((err) => {
             this.error = err;
           });
       }
     },
+    // On close dialog, close form and emit up to close the signinDialog
+
     closeDialog: function () {
       this.clearForm();
       this.$emit("update:signupDialog", false);
     },
+    // Clears validation errors and text
     clearForm: function () {
       this.firstName = "";
       this.lastName = "";

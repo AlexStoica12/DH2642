@@ -1,4 +1,5 @@
 <template>
+  <!-- Top Navigation Bar For Entire App -->
   <nav>
     <v-app-bar app class="rounded-xl mx-5 my-2 white">
       <!-- Logo -->
@@ -109,7 +110,13 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+    <!--If the signInDialog is set to true, opens the Signin Component 
+        SigninComponent can change the prop thus .sync is required
+      -->
     <SignIn v-bind:signinDialog.sync="signinDialog" />
+    <!--If the signUpDialog is set to true, opens the Signup Component 
+        SignupComponent can change the prop thus .sync is required
+      -->
     <Signup v-bind:signupDialog.sync="signupDialog" />
   </nav>
 </template>
@@ -132,8 +139,8 @@ export default {
       signinDialog: false,
       signupDialog: false,
       links: [
-        { icon: "mdi-home", text: "Explore", route: "/home" },
-        { icon: "mdi-home", text: "My Gallery", route: "/profile" },
+        { text: "Explore", route: "/home" },
+        { text: "My Gallery", route: "/profile" },
       ],
     };
   },

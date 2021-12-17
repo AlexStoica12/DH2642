@@ -1,4 +1,5 @@
 <template>
+  <!-- Page to test the model, api and vuex store -->
   <div>
     <v-btn color="success" @click="breakFunc">Break My Token</v-btn>
     <v-btn color="success" @click="test">Test my Api</v-btn>

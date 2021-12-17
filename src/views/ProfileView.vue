@@ -1,27 +1,28 @@
 <template>
+  <!-- If there are no artworks in My galery then it will show a text message
+  along with a button to navigate back to home page -->
   <v-row v-if="favoritedArtworks.length === 0">
-    <v-content>
-    <v-row align="center" justify="center">
-      <v-col align="center" sm="6" md="4">
-        <div>
-          <p class="text-center">
-            There's nothing in your Gallery yet!          
-          </p>
-        </div>
-        <v-btn
-          color="black"
-          class="pa-4 mt-16 white--text"
-          rounded
-          elevation="2"
-          x-large
-          @click.stop="$emit('navigateHome')"
-        >
-          Click here to explore art..
-        </v-btn>
-      </v-col>
-    </v-row>
-    </v-content>
+    <v-main>
+      <v-row align="center" justify="center">
+        <v-col align="center" sm="6" md="4">
+          <div>
+            <p class="text-center">There's nothing in your Gallery yet!</p>
+          </div>
+          <v-btn
+            color="black"
+            class="pa-4 mt-16 white--text"
+            rounded
+            elevation="2"
+            x-large
+            @click.stop="$emit('navigateHome')"
+          >
+            Click here to explore art..
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-main>
   </v-row>
+  <!-- Creates a responsive grid of artwork cards -->
   <v-row v-else>
     <v-col
       v-for="artwork in favoritedArtworks"

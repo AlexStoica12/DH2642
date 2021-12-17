@@ -1,4 +1,6 @@
 <template>
+  <!-- A card with an image of an artwork, the artwork title, and remove button -->
+  <!-- If artwork clicked, emit navigate to details page with new artwork -->
   <v-card class="pa-0 flex-column" outlined tile @click="$emit('navigateTo')">
     <v-img
       height="300px"
@@ -35,3 +37,4 @@ export default {
   emits: ["navigateTo", "removeArtwork"],
 };
 </script>
+f

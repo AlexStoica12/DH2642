@@ -1,6 +1,8 @@
 import { auth, db } from "../plugins/firebaseConfig.js";
 import store from "../store/index.js";
 
+// Observe if user is logged in
+// If logged in, load their data
 auth.onAuthStateChanged((user) => {
   if (user) {
     store.commit("setUser", user._delegate.uid);
@@ -9,6 +11,7 @@ auth.onAuthStateChanged((user) => {
       .then((favoritedArtworks) => {
         store.dispatch("setFavoritedArtworks", favoritedArtworks);
       })
+      // Active an observer to observe the favoritedArtworks in the store
       .then(() => {
         const watch = store.watch(
           (state, getters) => getters.favoritedArtworks,
@@ -23,6 +26,7 @@ auth.onAuthStateChanged((user) => {
       .catch((err) => {
         throw new Error(err);
       });
+    // If no user or user logged out, signout the user
   } else {
     if (store.getters.getUser !== null) {
       store.dispatch("signOut");
@@ -31,6 +35,7 @@ auth.onAuthStateChanged((user) => {
 });
 
 const firebaseModel = {
+  // One time call to load users data from firebase
   async loadUserData(userId) {
     if (userId !== null) {
       let favoritedArtworks;
@@ -38,6 +43,7 @@ const firebaseModel = {
         .ref("artsyModel/" + userId)
         .once("value")
         .then(function (snapshot) {
+          // If data is null or non-existant, return an empty array of favoritedArtworks
           if (snapshot.exists()) {
             favoritedArtworks = snapshot.val().favoritedArtworks;
           } else {
@@ -47,11 +53,13 @@ const firebaseModel = {
       return favoritedArtworks;
     }
   },
+  // Persist user's data
   async saveUserData(userId, favoritedArtworks) {
     await db.ref("artsyModel/" + userId).set({
       favoritedArtworks: favoritedArtworks,
     });
   },
+  // Sign Up the User
   async signUpAction(payload) {
     let user;
     await auth
@@ -64,6 +72,7 @@ const firebaseModel = {
       });
     return user;
   },
+  //Performs the sign in function pased on the email and password
   async signInAction(payload) {
     let user;
     await auth
@@ -76,6 +85,7 @@ const firebaseModel = {
       });
     return user;
   },
+  //Performs the sign out function
   async signOutAction() {
     await auth
       .signOut()
