@@ -61,7 +61,9 @@
             </div>
             <div>
               <h1 class="pl-4 pt-5">Gallery</h1>
-              <h2 class="pl-4">{{ currentArtworkDetails.collecting_institution }}</h2>
+              <h2 class="pl-4">
+                {{ currentArtworkDetails.collecting_institution }}
+              </h2>
             </div>
             <v-spacer></v-spacer>
             <v-btn
@@ -133,7 +135,7 @@
       <v-row class="pa-0">
         <v-col>
           <v-sheet color="white" min-height="20vh" rounded="lg" class="pt-0">
-            <h3 class="pa-4">Other works from the artis</h3>
+            <h3 class="pa-4">Other works from the artist</h3>
             <v-slide-group show-arrows>
               <v-slide-item
                 v-for="artwork in artworksCurrentArtist"
@@ -161,7 +163,7 @@
 import DetailsCard from "../components/detailsCard.vue";
 export default {
   name: "Details",
-  components: {DetailsCard},
+  components: { DetailsCard },
   computed: {
     currentArtworkDetails: function () {
       return this.$store.getters.myModel.currentArtworkDetails;

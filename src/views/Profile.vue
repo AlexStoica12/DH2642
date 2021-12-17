@@ -3,6 +3,7 @@
     v-bind:favorited-artworks="favoritedArtworks"
     @navigateTo="navigateTo"
     @navigateHome="navigateHome"
+    @removeArtwork="removeArtwork"
   />
 </template>
 
@@ -12,16 +13,13 @@ import ProfileView from "./ProfileView.vue";
 export default {
   name: "Profile",
   components: { ProfileView },
-  data: function () {
-    return {};
-  },
   computed: {
     favoritedArtworks: function () {
       return this.$store.getters.favoritedArtworks;
     },
   },
   methods: {
-    removeArtworkFromGallery: function (artwork) {
+    removeArtwork: function (artwork) {
       this.$store.dispatch("removeFromFavorited", artwork);
     },
     navigateHome: function () {
