@@ -1,7 +1,7 @@
 # artpoint
 
 Artpoint is an application designed for helping people discover new art and allowing them to keep a personal Gallery of the art they like.
-It is possible to search for artworks, add artworks to your Gallery, explore similar artworks to the ones you like, and find more artworks from your favorite artist.
+It is possible to search for artworks, add artworks to your Gallery, explore similar artworks to the ones you like, and find more artworks from your favorite artist. The website is responsive thus can be used on mobile or on a computer.
 
 Artwork uses the [Artsy API](https://www.artsy.net/).
 
