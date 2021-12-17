@@ -8,22 +8,25 @@
       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
       :src="imageURL"
     >
-      <span
-        class="text-md-subtitle-2 white--text pl-1 pt-4 d-inline-block"
-        v-text="artworkTitle"
-      ></span>
+      <span class="text-md-subtitle-2 white--text pl-1 pt-4 d-inline-block">{{
+        artworkTitle
+      }}</span>
     </v-img>
     <v-card-actions class="white justify-center">
       <v-col class="text-center">
-        <span
-          class="text-md-subtitle-2 black--text pl-4 pt-4 d-inline-block"
-          v-text="artworkGallery"
-        ></span>
+        <span class="text-md-subtitle-2 black--text pl-4 pt-4 d-inline-block">{{
+          artworkGallery
+        }}</span>
       </v-col>
     </v-card-actions>
     <v-row class="mb-3 mr-3">
       <v-spacer></v-spacer>
-      <v-btn color="orange" text @click.stop="$emit('removeArtwork')">
+      <v-btn
+        color="orange"
+        :ripple="false"
+        text
+        @click.stop="$emit('removeArtwork')"
+      >
         Remove
       </v-btn>
     </v-row>

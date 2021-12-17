@@ -1,8 +1,11 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
+import { Ripple } from "vuetify/lib/directives";
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  directives: {
+    Ripple,
+  },
+});
 
-const vuetify = new Vuetify({});
-
-export default vuetify;
+export default new Vuetify({});

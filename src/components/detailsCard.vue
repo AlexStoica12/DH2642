@@ -23,6 +23,7 @@
       <v-btn
         color="orange"
         text
+        :ripple="false"
         @click.stop="
           activateSnackbarAddToGallery();
           addArtworkToGallery();
