@@ -39,16 +39,7 @@
         </v-card-text>
 
         <!-- Error Message -->
-        <v-alert
-          v-if="error !== ''"
-          outlined
-          dense
-          prominent
-          type="error"
-          class="mx-2 text-caption text-center"
-        >
-          {{ error }}
-        </v-alert>
+        <ErrorAlert :error="error" />
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -60,9 +51,11 @@
 </template>
 <script>
 import firebaseModel from "../js/firebaseModel.js";
+import ErrorAlert from "./ErrorAlert.vue";
 export default {
   name: "Signin",
   props: ["signinDialog"],
+  components: { ErrorAlert },
   data() {
     return {
       email: "",

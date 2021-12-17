@@ -50,16 +50,8 @@
           <p>*indicates required field</p>
         </v-card-text>
         <!-- Error Message -->
-        <v-alert
-          v-if="error !== ''"
-          outlined
-          dense
-          prominent
-          type="error"
-          class="mx-2 text-caption text-center"
-        >
-          {{ error }}
-        </v-alert>
+        <ErrorAlert :error="error" />
+
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn class="ma-3" text @click="signup()"> Sign Up </v-btn>
@@ -70,10 +62,13 @@
 </template>
 <script>
 import firebaseModel from "../js/firebaseModel.js";
+import ErrorAlert from "./ErrorAlert.vue";
 
 export default {
   name: "Signup",
   props: ["signupDialog"],
+  components: { ErrorAlert },
+
   data() {
     return {
       firstName: "",
