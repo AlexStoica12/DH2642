@@ -1,7 +1,13 @@
 <template>
   <v-row v-if="favoritedArtworks.length === 0">
+    <v-content>
     <v-row align="center" justify="center">
       <v-col align="center" sm="6" md="4">
+        <div>
+          <p class="text-center">
+            There's nothing in your Gallery yet!          
+          </p>
+        </div>
         <v-btn
           color="black"
           class="pa-4 mt-16 white--text"
@@ -10,11 +16,11 @@
           x-large
           @click.stop="$emit('navigateHome')"
         >
-          There's nothing in your Gallery yet, click here to explore more
-          paintings..
+          Click here to explore art..
         </v-btn>
       </v-col>
     </v-row>
+    </v-content>
   </v-row>
   <v-row v-else>
     <v-col
